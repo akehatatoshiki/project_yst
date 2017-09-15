@@ -737,11 +737,33 @@ Imported.TMSrpg = true;
   };
 
   // SRPGパラメータを返す
-  Game_BattlerBase.prototype.srpgParam = function(tag) {
+  Game_BattlerBase.prototype.srpgParam = function(tag, type) {
+    var result;
+    switch(type){
+      case 'string': 
+        result = this.srpgStringParam(tag);
+        break;
+      default: 
+        result = this.srpgNumberParam(tag);
+    }
+    return result;
+  };
+
+  // SRPGパラメータを返す(数字)
+  Game_BattlerBase.prototype.srpgNumberParam = function(tag) {
     var result = this.traitObjects().reduce(function(r, object) {
       return r + Number(object.meta[tag] || 0);
     }, 0);
     return Math.max(result, 0);
+  };
+
+  // SRPGパラメータを返す(文字列)
+  Game_BattlerBase.prototype.srpgStringParam = function(tag) {
+    var result = this.traitObjects().find(function(object) {
+      return object.meta[tag] ? true : false
+    })
+    if(result) return result.meta[tag];
+    return '';
   };
 
   // SRPGフラグを返す
@@ -1213,12 +1235,16 @@ Imported.TMSrpg = true;
   
   // 移動可能範囲のルートチェック
   Game_Map.prototype.checkMovableArea = function(unit) {
-    var mov = unit.mov();
-    if (mov === 0) return;
-    if (mov === 100) {
-      this.createMovableArea(mov, unit);
+    var type = unit.type();
+    if (type === '') {
+      this.reateMovableAreaVyMov(unit);
       return;
     }
+    this.createMovableArea(type, unit);
+  };
+
+  Game_Map.prototype.createMovableAreaVyMov = function(unit) {
+    var mov = unit.mov();
     // movはユニットの移動距離
     mov = mov - 1;
     var a = [];
@@ -1232,14 +1258,13 @@ Imported.TMSrpg = true;
       var x = data[0];
       var y = data[1];
       var key = '' + x + ',' + y;
-      // ここの移動範囲ロジック全書き換えが必要
-      // this._srpgArea['1,2'] = '11' のような値が何の意味を示すのか・・・？
-      // 大事なのはKeyの中身っぽい
+      // this._srpgArea['1,2'] = '11' の '11' は移動経路を示す(下:1 左: 2 右: 3 上: 4)
       if (this._passableTable[data[2]][data[3]][data[4]] &&
           (!this._srpgArea[key] || data[5].length <= this._srpgArea[key].length)) {
         this._srpgArea[key] = data[5];
         if (data[6] > 0) {
           data[6] = data[6] - 1;
+          // 反対方向へ相殺するような移動をできないようにしてる
           if (data[4] !== 3) a.push([x, y + 1, x, y, 0, data[5] + '1', data[6]]);
           if (data[4] !== 2) a.push([x - 1, y, x, y, 1, data[5] + '2', data[6]]);
           if (data[4] !== 1) a.push([x + 1, y, x, y, 2, data[5] + '3', data[6]]);
@@ -1247,16 +1272,139 @@ Imported.TMSrpg = true;
         }
       }
     }
-    console.log(mov);
+  }
+
+  // ----------- 各駒の移動経路を作成する地獄のようなメソッド ---------------
+  // IDを受け取って移動可能範囲を生成する
+  Game_Map.prototype.createMovableArea = function(type, unit) {
+    switch(type) {
+      case 'hu':
+        this.createCrossArea([0, 0, 0, 1], unit);
+        break;
+      case 'hisya':
+        this.createCrossArea([9, 9, 9, 9], unit);
+        break;
+      case 'kaku':
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        break;
+      case 'kyousya':
+        this.createCrossArea([0, 0, 0, 9], unit);
+        break;
+      case 'keima':
+        this.createKnightArea([0, 0, 0, 1, 1, 0, 0, 0], unit);
+        break;
+      case 'gin': 
+        this.createCrossArea([0, 0, 0, 1], unit);
+        this.createDiagonallyArea([1, 1, 1, 1], unit);
+        break;
+      case 'kin':
+        this.createCrossArea([1, 1, 1, 1], unit);
+        this.createDiagonallyArea([0, 1, 1, 0], unit);
+        break;
+      case 'ou':
+        this.createCrossArea([1, 1, 1, 1], unit);
+        this.createDiagonallyArea([1, 1, 1, 1], unit);
+        break;
+      default:
+        this.createMovableAreaVyMov(unit);
+    }
+  };
+  // ----------- 地獄はここで終わりだ ---------------
+
+  // 十字の移動範囲を表示する
+  // [bottom, left, right, top]
+  Game_Map.prototype.createCrossArea = function(area, unit) {
+    var a = [];
+    
+    a.push([unit.x, unit.y + 1, unit.x, unit.y, 0, '1', area[0]]);
+    a.push([unit.x - 1, unit.y, unit.x, unit.y, 1, '2', area[1]]);
+    a.push([unit.x + 1, unit.y, unit.x, unit.y, 2, '3', area[2]]);
+    a.push([unit.x, unit.y - 1, unit.x, unit.y, 3, '4', area[3]]);
+    
+    while (a.length > 0) {
+      var data = a.pop();
+      var x = data[0];
+      var y = data[1];
+      var key = '' + x + ',' + y;
+      // this._srpgArea['1,2'] = '11' の '11' は移動経路を示す(下: 1 左: 2 右: 3 上: 4)
+      if (this._passableTable[data[2]][data[3]][data[4]] && data[6] > 0 &&
+          (!this._srpgArea[key] || data[5].length <= this._srpgArea[key].length)) {
+        this._srpgArea[key] = data[5];
+        if (data[6] > 0) {
+          data[6] = data[6] - 1;
+          if (data[4] === 0) a.push([x, y + 1, x, y, 0, data[5] + '1', data[6]]);
+          if (data[4] === 1) a.push([x - 1, y, x, y, 1, data[5] + '2', data[6]]);
+          if (data[4] === 2) a.push([x + 1, y, x, y, 2, data[5] + '3', data[6]]);
+          if (data[4] === 3) a.push([x, y - 1, x, y, 3, data[5] + '4', data[6]]);
+        }
+      }
+    }
   };
 
-  // IDを受け取って移動可能範囲を生成する
-  Game_Map.prototype.createMovableArea = function(id, unit) {
-    var x = unit.x;
-    var y = unit.y + 1;
-    // これで歩になるはず
-    var key = '' + x + ',' + y;
-    this._srpgArea[key] = '1';
+  // ナナメの移動範囲を表示する
+  // [left-bottom, left-top, right-top, right-bottom]
+  Game_Map.prototype.createDiagonallyArea = function(area, unit) {
+    var a = [];
+    
+    a.push([unit.x - 1, unit.y + 1, unit.x, unit.y, 0, '1', '2', area[0]]);
+    a.push([unit.x - 1, unit.y - 1, unit.x, unit.y, 1, '2', '4', area[1]]);
+    a.push([unit.x + 1, unit.y - 1, unit.x, unit.y, 2, '3', '4', area[2]]);
+    a.push([unit.x + 1, unit.y + 1, unit.x, unit.y, 3, '1', '3', area[3]]);
+
+    var mov = 0;
+
+    while (a.length > 0) {
+      var data = a.pop();
+      var max_x = this._passableTable.length - 1;
+      var max_y = this._passableTable[data[2]].length - 1;
+      var x = data[0];
+      var y = data[1];
+      var key = '' + x + ',' + y;
+      if (!(data[2] < max_x && data[3] < max_y && data[2] > -1 && data[3] > -1) ) continue;
+      if (this._passableTable[data[2]][data[3]][data[4]] && data[7] > 0 &&
+          (!this._srpgArea[key] || (data[5] + data[6]).length <= this._srpgArea[key].length)) {
+        this._srpgArea[key] = (data[5] + data[6]);
+        if (data[7] > 0) {
+          data[7] = data[7] - 1;
+          if (data[4] === 0) a.push([x - 1, y + 1, x, y, 0, data[5] + '1', data[6] + '2', data[7]]);
+          if (data[4] === 1) a.push([x - 1, y - 1, x, y, 1, data[5] + '2', data[6] + '4', data[7]]);
+          if (data[4] === 2) a.push([x + 1, y - 1, x, y, 2, data[5] + '3', data[6] + '4', data[7]]);
+          if (data[4] === 3) a.push([x + 1, y + 1, x, y, 3, data[5] + '1', data[6] + '3', data[7]]);
+        }
+      }
+    }
+  };
+
+  // チェスのナイトの移動範囲を指定する（1 or 0）
+  // [bottom-left, left-bottom, left-top, top-left, 
+  //            top-right, right-top, right-bottom, bottom-right]
+  Game_Map.prototype.createKnightArea = function(area, unit) {
+    var a = [];
+    
+    a.push([unit.x - 1, unit.y + 2, unit.x, unit.y, 0, '211', area[0]]);
+    a.push([unit.x - 2, unit.y + 1, unit.x, unit.y, 1, '221', area[1]]);
+    a.push([unit.x - 2, unit.y - 1, unit.x, unit.y, 1, '224', area[2]]);
+    a.push([unit.x - 1, unit.y - 2, unit.x, unit.y, 3, '244', area[3]]);
+    a.push([unit.x + 1, unit.y - 2, unit.x, unit.y, 3, '344', area[4]]);
+    a.push([unit.x + 2, unit.y - 1, unit.x, unit.y, 2, '433', area[5]]);
+    a.push([unit.x + 2, unit.y + 1, unit.x, unit.y, 2, '133', area[6]]);
+    a.push([unit.x + 1, unit.y + 2, unit.x, unit.y, 0, '311', area[7]]);
+
+    var mov = 0;
+
+    while (a.length > 0) {
+      var data = a.pop();
+      var max_x = this._passableTable.length - 1;
+      var max_y = this._passableTable[data[2]].length - 1;
+      var x = data[0];
+      var y = data[1];
+      var key = '' + x + ',' + y;
+      if (!(data[2] < max_x && data[3] < max_y && data[2] > -1 && data[3] > -1) ) continue;
+      if (this._passableTable[data[2]][data[3]][data[4]] && data[6] > 0 &&
+          (!this._srpgArea[key] || data[5].length <= this._srpgArea[key].length)) {
+        this._srpgArea[key] = data[5];
+      }
+    }
   };
 
   // 待機範囲を表示する
@@ -1550,10 +1698,10 @@ Imported.TMSrpg = true;
     var srpgActorId = this.event().meta.srpgActor;
     if (srpgActorId) {
       this.setSelfSwitch('A', false);
-      var actor = $gameParty.allMembers()[+srpgActorId];
+      var actor = $gameActors.actor(srpgActorId);
       if (actor) {
         this.initSrpgUnitSetting();
-        this._srpgActorId = +srpgActorId;
+        this._srpgActorId = srpgActorId;
         this.setImage(actor.characterName(), actor.characterIndex());
       } else {
         this.erase();
@@ -1598,7 +1746,7 @@ Imported.TMSrpg = true;
   
   // イベントのSRPGバトラーを返す
   Game_Event.prototype.srpgBattler = function() {
-    if (this.isSrpgActorUnit()) return $gameParty.allMembers()[this._srpgActorId];
+    if (this.isSrpgActorUnit()) return $gameActors.actor(this._srpgActorId);
     return this._srpgBattler;
   };
   
@@ -1651,6 +1799,11 @@ Imported.TMSrpg = true;
   // イベントの移動力を返す
   Game_Event.prototype.mov = function() {
     return Math.max(this.srpgBattler().srpgParam('mov'), 0);
+  };
+
+  // イベントのタイプを返す
+  Game_Event.prototype.type = function() {
+    return this.srpgBattler().srpgParam('type', 'string');
   };
   
   // イベントの索敵距離を返す
