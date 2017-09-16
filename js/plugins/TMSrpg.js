@@ -215,7 +215,7 @@
  * @default 0
  * @require 1
  * @type animation
- * 
+ *
  * @param srpgCommandX
  * @desc コマンドウィンドウの表示位置（Ｘ座標）
  * 初期値: 0
@@ -290,22 +290,22 @@
  *
  * @help
  * TMPlugin - シミュレーションRPG ver0.1.3a
- * 
+ *
  * 使用方法:
- * 
+ *
  *   下記URLを参照してください。
  *   http://hikimoki.sakura.ne.jp/plugin/plugin_srpg.html
  *   このヘルプにはメモ欄タグやプラグインコマンドの簡単な説明のみを
  *   記載しています。
- * 
+ *
  *   このプラグインは RPGツクールMV Version 1.3.5 で動作確認をしています。
- * 
+ *
  *   このプラグインはMITライセンスのもとに配布しています、商用利用、
  *   改造、再配布など、自由にお使いいただけます。
  *
- * 
+ *
  * メモ欄タグ（イベント）:
- * 
+ *
  *   <srpgManager>
  *   このタグのついたイベントをSRPG管理イベントとして利用します。
  *
@@ -319,35 +319,35 @@
  *
  *   <neutral>
  *   このタグのついたイベントは残りユニット数のカウントから除外します。
- * 
+ *
  *   <traitor>
  *   このタグのついたイベントに行動制約『味方を攻撃』が常時付加されます。
- * 
+ *
  *   <autoState:5 9>
  *   SRPG開始時、またはsrpgAddUnitコマンド実行時に 5 番と 9 番のステートを
  *   自動的に付加します。
  *
- * 
+ *
  * メモ欄タグ（アクター、職業、武器、防具、敵キャラ、ステート）:
- * 
+ *
  *   <mov:4>
  *   移動力を設定します。アクターの場合は現在の職業、装備品、ステートの値も
  *   含めた合計値が採用されます。
- * 
+ *
  *   <shipMove>
  *   通常は進入不可能な水の上も移動することができるようになります。
  *
  *   <floatMove>
  *   地形を無視して移動することができるようになります。
- * 
+ *
  *   <search:5>
  *   索敵距離を設定します。一番近くにいる敵対ユニットとの距離が
  *   この値よりも大きい場合、移動も行動もしなくなります。
  *   タグを省略、または 0 を指定するとこの機能はオフになります。
- * 
- * 
+ *
+ *
  * メモ欄タグ（アイテム、スキル）:
- * 
+ *
  *   <range:diamond 2>
  *   スキルの射程距離を設定します。射程タイプと射程距離を半角スペースで
  *   区切って指定してください。射程タイプは下記の中から選んでください。
@@ -360,13 +360,13 @@
  *   <effect:rect 3>
  *   スキルの効果範囲を設定します。範囲タイプと大きさを半角スペースで
  *   区切って指定してください。指定する値は射程距離と同じです。
- * 
- * 
+ *
+ *
  * メモ欄タグ（敵キャラ）:
- * 
+ *
  *   <faceName:Monster>
  *   敵キャラの顔グラフィックとして利用する画像ファイル名を設定します。
- * 
+ *
  *   <faceIndex:0>
  *   敵キャラの顔グラフィックのインデックスを設定します。
  *   インデックスとは画像のどの部分を使用するかを決める番号です。
@@ -395,29 +395,29 @@
  *
  *   <attackAnimation:6>
  *   敵キャラの通常攻撃のアニメーション番号を設定します。
- * 
- * 
+ *
+ *
  * プラグインコマンド:
- * 
+ *
  *   reserveSrpg
  *   SRPG機能を有効化する予約をします、このコマンドを実行したあとにイベント
  *   コマンド『場所移動』でマップが切り替わるとSRPG機能が有効になります。
  *
  *   srpgCursorMove 10 5
  *   SRPGカーソルを座標 (10, 5) へ移動させます。
- * 
+ *
  *   srpgCursorMoveToEvent 2
  *   SRPGカーソルをイベント 2 番へ移動させます。
- * 
+ *
  *   setSrpgDestination 4 10 15
  *   4 番のイベントの目的地を座標 (10, 15) に設定します。
- * 
+ *
  *   clearSrpgDestination 4
  *   4 番のイベントの目的地設定を解除します。
- * 
- * 
+ *
+ *
  * スクリプトコマンド:
- * 
+ *
  *   this.isSrpgTurnStart()
  *   ターン開始フラグが立っているかどうかを返します。
  *
@@ -426,23 +426,23 @@
  *
  *   this.srpgNextUnit()
  *   次に行動するイベント番号を返します。
- * 
+ *
  *   this.srpgLastUnit()
  *   直前に行動したイベント番号を返します。
- * 
+ *
  *   this.srpgBattler(0)
  *   ユニットイベントのバトラーオブジェクトを返します。
  *   括弧内に取得したいユニットイベントのイベント番号を指定してください。
  *   0 を指定した場合はこのコマンドを実行しているイベントが対象となります。
  *   何も指定しなかった場合は次に行動するイベント、または直前に行動した
  *   イベントが対象となります。
- * 
+ *
  *   this.srpgRemoveUnit(0)
  *   ユニットイベントを強制的に排除します。
  *   戦闘不能になった場合と同じ扱いとなり、セルフスイッチＡが自動的に
  *   オンになり、イベント内容も実行されます。
  *   対象の指定方法は this.srpgBattler と同じです。
- * 
+ *
  *   this.srpgAddUnit(10, 1)
  *   イベント番号 10 番を敵キャラ 1 番のエネミーユニットとして設定します。
 */
@@ -509,7 +509,7 @@ Imported.TMSrpg = true;
   var srpgInfoSize = parameters['srpgInfoSize'].split('*').map(Number);
   var srpgStatusArrowImage = parameters['srpgStatusArrowImage'];
   var srpgCursorImage = parameters['srpgCursorImage'];
-  
+
   //-----------------------------------------------------------------------------
   // Game_Temp
   //
@@ -530,7 +530,7 @@ Imported.TMSrpg = true;
     if (this._srpgDummyWindow == null) this._srpgDummyWindow = new Window_Base(0, 0, 0, 0);
     return this._srpgDummyWindow;
   };
-  
+
   // SRPGコマンドウィンドウの復元予約
   Game_Temp.prototype.reserveSrpgCommand = function(index, event) {
     this._srpgCommandIndex = index;
@@ -556,17 +556,17 @@ Imported.TMSrpg = true;
   Game_Temp.prototype.srpgCommandEvent = function() {
     return $gameMap.event(this._srpgCommandEventId);
   };
-  
+
   // SRPGのターン開始フラグをセット
   Game_Temp.prototype.setSrpgTurnStart = function(flag) {
     this._srpgTurnStart = flag;
   };
-  
+
   // SRPGのターン開始フラグが立っているかを返す
   Game_Temp.prototype.isSrpgTurnStart = function() {
     return this._srpgTurnStart;
   };
-  
+
   // これから行動するユニットのイベント番号をクリア
   Game_Temp.prototype.clearSrpgNextUnitId = function() {
     this.setSrpgNextUnitId(0);
@@ -740,10 +740,10 @@ Imported.TMSrpg = true;
   Game_BattlerBase.prototype.srpgParam = function(tag, type) {
     var result;
     switch(type){
-      case 'string': 
+      case 'string':
         result = this.srpgStringParam(tag);
         break;
-      default: 
+      default:
         result = this.srpgNumberParam(tag);
     }
     return result;
@@ -757,8 +757,24 @@ Imported.TMSrpg = true;
     return Math.max(result, 0);
   };
 
+  // 何もかもMacが悪い
+  // ECMA 6の一部メソッドが対応してないのをここで魔術る
+  Game_BattlerBase.prototype.rescueFind = function() {
+    Array.prototype.find = function (callback, thisArg) {
+      "use strict";
+      var arr = this, arrLen = arr.length, i;
+      for (i = 0; i < arrLen; i += 1) {
+        if (callback.call(thisArg, arr[i], i, arr)) {
+            return arr[i];
+        }
+      }
+      return undefined;
+    };
+  }
+
   // SRPGパラメータを返す(文字列)
   Game_BattlerBase.prototype.srpgStringParam = function(tag) {
+    if(!Array.prototype.find) this.rescueFind();
     var result = this.traitObjects().find(function(object) {
       return object.meta[tag] ? true : false
     })
@@ -840,7 +856,7 @@ Imported.TMSrpg = true;
   Game_Enemy.prototype.faceIndex = function() {
     return +(this.enemy().meta.faceIndex || 0);
   };
-  
+
   Game_Enemy.prototype.nickname = function() {
     return this.enemy().meta.nickname || '';
   };
@@ -898,7 +914,7 @@ Imported.TMSrpg = true;
   Game_Map.prototype.isSrpg = function() {
     return this._srpgActive;
   };
-  
+
   // SRPG機能を有効にします
   Game_Map.prototype.srpgActivate = function() {
     this._srpgActive = true;
@@ -909,19 +925,19 @@ Imported.TMSrpg = true;
     this.setupSrpgUnits();                // SRPGユニットのセットアップ
     this.onSrpgTurnStart();
   };
-  
+
   // SRPG機能を無効にします
   Game_Map.prototype.srpgDeactivate = function() {
     this._srpgActive = false;
     $gameTemp.clearSrpgCommand();
     $gameTemp.clearSrpgNextUnitId();
   };
-  
+
   // SRPGの開始を予約します
   Game_Map.prototype.reserveSrpgStart = function() {
     this._needsSrpgStart = true;
   };
-  
+
   // ターン開始
   Game_Map.prototype.onSrpgTurnStart = function() {
     this._srpgActorTurn = !this._srpgActorTurn;
@@ -945,7 +961,7 @@ Imported.TMSrpg = true;
   Game_Map.prototype.isSrpgActorTurn = function() {
     return this._srpgActorTurn;
   };
-  
+
   // マップのセットアップ
   var _Game_Map_setup = Game_Map.prototype.setup;
   Game_Map.prototype.setup = function(mapId) {
@@ -958,7 +974,7 @@ Imported.TMSrpg = true;
       this.srpgDeactivate();              // SRPG機能を無効化
     }
   };
-  
+
   // 地形通行判定テーブルをセットアップ
   Game_Map.prototype.setupTilePassableTable = function() {
     this._normalTilePassableTable = [];
@@ -1011,17 +1027,17 @@ Imported.TMSrpg = true;
       }
     }
   };
-  
+
   // SRPG管理イベントを返す
   Game_Map.prototype.srpgManagerEvent = function() {
     return this.event(this._srpgManagerEventId);
   };
-  
+
   // SRPG管理イベントを起動する
   Game_Map.prototype.startSrpgManagerEvent = function() {
     this.srpgManagerEvent().start();
   };
-  
+
   // SRPGユニットのセットアップ
   Game_Map.prototype.setupSrpgUnits = function() {
     this._srpgEnemyIds = {};
@@ -1054,7 +1070,7 @@ Imported.TMSrpg = true;
     });
     $gameVariables.setValue(vnActorUnitNums, events.length);
   };
-  
+
   // 残っているエネミーユニットの数を更新
   Game_Map.prototype.updateEnemyUnitNums = function() {
     var events = this.srpgEnemyUnits(true).filter(function(event) {
@@ -1062,21 +1078,21 @@ Imported.TMSrpg = true;
     });
     $gameVariables.setValue(vnEnemyUnitNums, events.length);
   };
-  
+
   // SRPGユニットを返す
   Game_Map.prototype.srpgUnits = function(alive) {
     return this.events().filter(function(event) {
       return event.isSrpgUnit(alive);
     });
   };
-  
+
   // SRPGアクターユニットを返す
   Game_Map.prototype.srpgActorUnits = function(alive) {
     return this.events().filter(function(event) {
       return event.isSrpgActorUnit(alive);
     });
   };
-  
+
   // SRPGエネミーユニットを返す
   Game_Map.prototype.srpgEnemyUnits = function(alive) {
     return this.events().filter(function(event) {
@@ -1089,7 +1105,7 @@ Imported.TMSrpg = true;
     return this._srpgActorTurn ? this.srpgActorUnits(alive) :
            this.srpgEnemyUnits(alive);
   };
-  
+
   // 指定ユニットと違う勢力に属するユニットを返す
   Game_Map.prototype.srpgOpponentUnits = function(unit, alive) {
     return unit.isSrpgActorUnit() ? this.srpgEnemyUnits(alive) : this.srpgActorUnits(alive);
@@ -1109,12 +1125,12 @@ Imported.TMSrpg = true;
       return (event.srpgBattler().confusionLevel() < 3) !== !event.isTraitor();
     }));
   };
-  
+
   // 指定ユニットと同じ勢力に属するユニットを返す
   Game_Map.prototype.srpgFriendUnits = function(unit, alive) {
     return unit.isSrpgActorUnit() ? this.srpgActorUnits(alive) : this.srpgEnemyUnits(alive);
   };
-  
+
   // 指定座標のSRPGユニットを返す
   Game_Map.prototype.srpgUnitXy = function(x, y, alive) {
     var events = this.srpgUnits(alive);
@@ -1124,7 +1140,7 @@ Imported.TMSrpg = true;
     }
     return null;
   };
-  
+
   // 範囲内のSRPGユニットを返す
   Game_Map.prototype.srpgUnitsArea = function(area, alive) {
     area = area || this._srpgArea;
@@ -1137,6 +1153,24 @@ Imported.TMSrpg = true;
     }
     return result;
   };
+
+  Game_Map.prototype.srpgBoardInfomation = function(unit, action){
+    var info = {
+      'enemy': {},
+      'allies': {}
+    };
+    var enemys = this.srpgEnemyUnits(true);
+    var allies = this.srpgActorUnits(true);
+    var add_hash = function(unit) {
+      var key = '' + unit.x + ',' + unit.y;
+      var type = unit.type();
+      if(type) info[this][key] = type;
+    }
+
+    enemys.forEach(add_hash, 'enemy');
+    allies.forEach(add_hash, 'allies');
+    return info;
+  }
 
   // 指定した行動が有効なユニットを返す
   Game_Map.prototype.srpgActionEffectiveUnits = function(unit, action) {
@@ -1177,14 +1211,14 @@ Imported.TMSrpg = true;
       return event.isMoveRouteForcing();
     });
   };
-  
+
   // アニメーション表示中のSRPGユニットがいるかどうかを返す
   Game_Map.prototype.isSrpgUnitAnimationPlaying = function() {
     return this.srpgUnits().some(function(event) {
       return event.isAnimationPlaying();
     });
   };
-  
+
   // イベントを指定座標からの距離で並べ替える
   Game_Map.prototype.sortEventsDistance = function(events, x, y) {
     events.sort(function(a, b) {
@@ -1194,7 +1228,7 @@ Imported.TMSrpg = true;
     });
     return events;
   };
-  
+
   // イベントを敏捷性で並べ替える
   Game_Map.prototype.sortEventsAgi = function(events) {
     events.sort(function(a, b) {
@@ -1202,7 +1236,7 @@ Imported.TMSrpg = true;
     });
     return events;
   };
-  
+
   // 移動可能範囲を表示する
   Game_Map.prototype.showMovableArea = function(unit) {
     this._srpgArea = {};
@@ -1232,7 +1266,7 @@ Imported.TMSrpg = true;
       }
     }
   };
-  
+
   // 移動可能範囲のルートチェック
   Game_Map.prototype.checkMovableArea = function(unit) {
     var type = unit.type();
@@ -1241,6 +1275,7 @@ Imported.TMSrpg = true;
       return;
     }
     this.createMovableArea(type, unit);
+    console.log(this.srpgBoardInfomation());
   };
 
   Game_Map.prototype.createMovableAreaVyMov = function(unit) {
@@ -1248,7 +1283,7 @@ Imported.TMSrpg = true;
     // movはユニットの移動距離
     mov = mov - 1;
     var a = [];
-    
+
     a.push([unit.x, unit.y + 1, unit.x, unit.y, 0, '1', mov]);
     a.push([unit.x - 1, unit.y, unit.x, unit.y, 1, '2', mov]);
     a.push([unit.x + 1, unit.y, unit.x, unit.y, 2, '3', mov]);
@@ -1293,7 +1328,7 @@ Imported.TMSrpg = true;
       case 'keima':
         this.createKnightArea([0, 0, 0, 1, 1, 0, 0, 0], unit);
         break;
-      case 'gin': 
+      case 'gin':
         this.createCrossArea([0, 0, 0, 1], unit);
         this.createDiagonallyArea([1, 1, 1, 1], unit);
         break;
@@ -1315,12 +1350,12 @@ Imported.TMSrpg = true;
   // [bottom, left, right, top]
   Game_Map.prototype.createCrossArea = function(area, unit) {
     var a = [];
-    
+
     a.push([unit.x, unit.y + 1, unit.x, unit.y, 0, '1', area[0]]);
     a.push([unit.x - 1, unit.y, unit.x, unit.y, 1, '2', area[1]]);
     a.push([unit.x + 1, unit.y, unit.x, unit.y, 2, '3', area[2]]);
     a.push([unit.x, unit.y - 1, unit.x, unit.y, 3, '4', area[3]]);
-    
+
     while (a.length > 0) {
       var data = a.pop();
       var x = data[0];
@@ -1345,7 +1380,7 @@ Imported.TMSrpg = true;
   // [left-bottom, left-top, right-top, right-bottom]
   Game_Map.prototype.createDiagonallyArea = function(area, unit) {
     var a = [];
-    
+
     a.push([unit.x - 1, unit.y + 1, unit.x, unit.y, 0, '1', '2', area[0]]);
     a.push([unit.x - 1, unit.y - 1, unit.x, unit.y, 1, '2', '4', area[1]]);
     a.push([unit.x + 1, unit.y - 1, unit.x, unit.y, 2, '3', '4', area[2]]);
@@ -1376,11 +1411,11 @@ Imported.TMSrpg = true;
   };
 
   // チェスのナイトの移動範囲を指定する（1 or 0）
-  // [bottom-left, left-bottom, left-top, top-left, 
+  // [bottom-left, left-bottom, left-top, top-left,
   //            top-right, right-top, right-bottom, bottom-right]
   Game_Map.prototype.createKnightArea = function(area, unit) {
     var a = [];
-    
+
     a.push([unit.x - 1, unit.y + 2, unit.x, unit.y, 0, '211', area[0]]);
     a.push([unit.x - 2, unit.y + 1, unit.x, unit.y, 1, '221', area[1]]);
     a.push([unit.x - 2, unit.y - 1, unit.x, unit.y, 1, '224', area[2]]);
@@ -1412,7 +1447,7 @@ Imported.TMSrpg = true;
     this._srpgArea = this.createArea(unit.x, unit.y, ['diamond', 1, 'rect', 0]);
     this.setColorArea(colorAreaWaiting);
   };
-  
+
   // 射程範囲を表示する
   Game_Map.prototype.showRangeArea = function(x, y, skill) {
     this._srpgArea = this.createRangeArea(x, y, skill);
@@ -1424,7 +1459,7 @@ Imported.TMSrpg = true;
     var a = (skill.meta.range || 'diamond 1').split(' ');
     return this.createArea(x, y, a);
   };
-  
+
   // 効果範囲を表示する
   Game_Map.prototype.showEffectArea = function(x, y, skill) {
     this._srpgArea = this.createEffectArea(x, y, skill);
@@ -1456,7 +1491,7 @@ Imported.TMSrpg = true;
     }
     return area;
   };
-  
+
   Game_Map.prototype.setArea = function(area, checker, x, y, size) {
     for (var x2 = x - size; x2 <= x + size; x2++) {
       for (var y2 = y - size; y2 <= y + size; y2++) {
@@ -1500,17 +1535,17 @@ Imported.TMSrpg = true;
   Game_Map.prototype.isSrpgAreaEmpty = function() {
     return Object.keys(this._srpgArea).length === 0;
   };
-  
+
   // 範囲表示を隠す
   Game_Map.prototype.hideSrpgArea = function() {
     this.initColorArea();
   };
-  
+
   // 指定座標の範囲の値を返す
   Game_Map.prototype.srpgAreaXy = function(x, y) {
     return this._srpgArea['' + x + ',' + y];
   };
-  
+
   // 指定座標に一番近い範囲の座標を返す
   Game_Map.prototype.posInsideAreaNearXy = function(x, y) {
     var result = null;
@@ -1525,7 +1560,7 @@ Imported.TMSrpg = true;
     for (var prop in this._srpgArea) {
       var pos = prop.split(',').map(Number);
       var d = Math.abs(x - pos[0]) + Math.abs(y - pos[1]);
-      if (pos[0] === bonusX && pos[1] === bonusY) d--; 
+      if (pos[0] === bonusX && pos[1] === bonusY) d--;
       if (d < minValue) {
         minValue = d;
         result = new Point(pos[0], pos[1]);
@@ -1533,7 +1568,7 @@ Imported.TMSrpg = true;
     }
     return result;
   };
-  
+
   // 指定座標から一番遠い範囲の座標を返す
   Game_Map.prototype.posInsideAreaFarXy = function(x, y) {
     var result = null;
@@ -1548,7 +1583,7 @@ Imported.TMSrpg = true;
     }
     return result;
   };
-  
+
   // 指定座標が範囲に含まれているかを返す
   Game_Map.prototype.isInsideArea = function(x, y) {
     return this.srpgAreaXy(x, y) !== undefined;
@@ -1570,20 +1605,20 @@ Imported.TMSrpg = true;
     }
     return result;
   };
-  
+
   //-----------------------------------------------------------------------------
   // Game_CharacterBase
   //
-  
+
   // キャラクターがSRPGユニットかどうかを返す
   Game_CharacterBase.prototype.isSrpgUnit = function() {
     return false;
   };
-  
+
   //-----------------------------------------------------------------------------
   // Game_Character
   //
-  
+
   Game_Character.prototype.turnTowardXy = function(x, y) {
     var sx = this.deltaXFrom(x);
     var sy = this.deltaYFrom(y);
@@ -1597,7 +1632,7 @@ Imported.TMSrpg = true;
   //-----------------------------------------------------------------------------
   // Game_Player
   //
-  
+
   var _Game_Player_hasStepAnime = Game_Player.prototype.hasStepAnime;
   Game_Player.prototype.hasStepAnime = function() {
     return _Game_Player_hasStepAnime.call(this) || $gameMap.isSrpg();
@@ -1650,16 +1685,16 @@ Imported.TMSrpg = true;
     this._srpgVx = Math.abs((this._x - this._realX) / 8);
     this._srpgVy = Math.abs((this._y - this._realY) / 8);
   };
-  
+
   // SRPG機能（カメラ）としての移動先をセットする（イベントで指定）
   Game_Player.prototype.setSrpgCameraEvent = function(event) {
     this.setSrpgCameraXy(event.x, event.y);
   };
-  
+
   //-----------------------------------------------------------------------------
   // Game_Followers
   //
-  
+
   var _Game_Followers_isVisible = Game_Followers.prototype.isVisible;
   Game_Followers.prototype.isVisible = function() {
     return _Game_Followers_isVisible.call(this) && !$gameMap.isSrpg();
@@ -1679,7 +1714,7 @@ Imported.TMSrpg = true;
     this.refresh();
     this.start();
   };
-  
+
   var _Game_Event_erase = Game_Event.prototype.erase;
   Game_Event.prototype.erase = function() {
     _Game_Event_erase.call(this);
@@ -1743,30 +1778,30 @@ Imported.TMSrpg = true;
     battler.setPlural(plural);
     battler.setLetter(plural ? $gameTroop.letterTable()[this._letterIndex] : '');
   };
-  
+
   // イベントのSRPGバトラーを返す
   Game_Event.prototype.srpgBattler = function() {
     if (this.isSrpgActorUnit()) return $gameActors.actor(this._srpgActorId);
     return this._srpgBattler;
   };
-  
+
   // イベントがSRPGユニットかどうかを返す
   Game_Event.prototype.isSrpgUnit = function(alive) {
     return this.isSrpgActorUnit(alive) || this.isSrpgEnemyUnit(alive);
   };
-  
+
   // イベントがSRPGアクターユニットかどうかを返す
   Game_Event.prototype.isSrpgActorUnit = function(alive) {
     if (this._srpgActorId == null) return false;
     return alive == null || this.srpgBattler().isAlive() === alive;
   };
-  
+
   // イベントがSRPGエネミーユニットかどうかを返す
   Game_Event.prototype.isSrpgEnemyUnit = function(alive) {
     if (this._srpgEnemyId == null) return false;
     return alive == null || this.srpgBattler().isAlive() === alive;
   };
-  
+
   // イベントが対象ユニットと同じ勢力に属しているかどうかを返す
   Game_Event.prototype.isFriend = function(unit) {
     return this.srpgBattler().isActor() === unit.srpgBattler().isActor();
@@ -1785,17 +1820,17 @@ Imported.TMSrpg = true;
   Game_Event.prototype.isSrpgInputtable = function() {
     return this.isSrpgActorUnit(true) && !this.isSrpgAutoBattle();
   };
-  
+
   // イベントが水上移動可能状態かどうかを返す
   Game_Event.prototype.isShip = function() {
     return this.srpgBattler().srpgFlag('shipMove');
   };
-  
+
   // イベントが浮遊移動状態かどうかを返す
   Game_Event.prototype.isFloat = function() {
     return this.srpgBattler().srpgFlag('floatMove');
   };
-  
+
   // イベントの移動力を返す
   Game_Event.prototype.mov = function() {
     return Math.max(this.srpgBattler().srpgParam('mov'), 0);
@@ -1805,7 +1840,7 @@ Imported.TMSrpg = true;
   Game_Event.prototype.type = function() {
     return this.srpgBattler().srpgParam('type', 'string');
   };
-  
+
   // イベントの索敵距離を返す
   Game_Event.prototype.search = function() {
     return this.srpgBattler().srpgParam('search');
@@ -1815,28 +1850,28 @@ Imported.TMSrpg = true;
   Game_Event.prototype.isTraitor = function() {
     return this.event().meta.traitor;
   };
-  
+
   // イベントが移動可能かどうかを返す
   Game_Event.prototype.canSrpgMove = function() {
     return !this._moved && this.mov() > 0;
   };
-  
+
   // イベントの移動を終了する
   Game_Event.prototype.endSrpgMove = function() {
     this._moved = true;
   };
-  
+
   // イベントが行動可能かどうかを返す
   Game_Event.prototype.canSrpgAct = function() {
     return !this._acted && this.srpgBattler().canMove();
   };
-  
+
   // イベントの行動を終了する
   Game_Event.prototype.endSrpgAction = function() {
     this._acted = true;
     this.clearLastPosition();     // 移動前の座標情報をクリア
   };
-  
+
   // イベントのターン開始処理
   Game_Event.prototype.onSrpgTurnStart = function() {
     var battler = this.srpgBattler();
@@ -1845,7 +1880,7 @@ Imported.TMSrpg = true;
     this._moved = false;
     this._acted = false;
   };
-  
+
   // イベントの待機処理
   Game_Event.prototype.executeSrpgWaiting = function(x, y) {
     this.turnTowardXy(x, y);
@@ -1880,7 +1915,7 @@ Imported.TMSrpg = true;
   Game_Event.prototype.srpgDestination = function() {
     return this._srpgDestination;
   };
-  
+
   // 文字列から移動ルートを生成して移動する
   Game_Event.prototype.moveRouteText = function(routeText) {
     var gc = Game_Character;
@@ -1898,7 +1933,7 @@ Imported.TMSrpg = true;
     this._lastPosition = {x:this._x, y:this._y, direction:this.direction()};
     this._moved = true;     // 移動済みフラグを立てる
   };
-  
+
   // 移動キャンセル
   Game_Event.prototype.backToLastPosition = function() {
     this.refreshRegionEffect(this._x, this._y, this._lastPosition.x, this._lastPosition.y);
@@ -1907,12 +1942,12 @@ Imported.TMSrpg = true;
     this.clearLastPosition();     // 移動前の座標情報をクリア
     this._moved = false;
   };
-  
+
   // 移動前の座標情報をクリア
   Game_Event.prototype.clearLastPosition = function() {
     this._lastPosition = null;
   };
-  
+
   // 移動前の座標情報が有効かどうかを返す
   Game_Event.prototype.isLastPositionValid = function() {
     return !!this._lastPosition;
@@ -1927,7 +1962,8 @@ Imported.TMSrpg = true;
     if (lastStateId !== newStateId && lastStateId) battler.removeState(lastStateId);
     if (newStateId) battler.addState(newStateId);
   };
-  
+
+  // ----------- 思考ルーチン ---------------
   // 指定した行動を評価して最も効果の高い座標を返す
   Game_Event.prototype.srpgEvaluateAction = function(action) {
     var skill = action.item();
@@ -1958,7 +1994,8 @@ Imported.TMSrpg = true;
     }
     return result;
   };
-  
+  // ----------- ここまで ------------------
+
   // 行動のアニメーションを表示
   Game_Event.prototype.showSrpgActionAnimation = function() {
     var subject = this.srpgBattler();
@@ -1981,7 +2018,7 @@ Imported.TMSrpg = true;
     this.turnTowardCharacter(target);       // 最初の行動者がいる方向を向く
     target.requestAnimation(animationId);   // アニメーションの表示
   };
-  
+
   // 行動の実行
   Game_Event.prototype.executeSrpgAction = function() {
     $gameTemp.setSrpgNextUnitId(-this.eventId());
@@ -2043,13 +2080,13 @@ Imported.TMSrpg = true;
     }
     return false;
   };
-  
+
   // ダメージポップアップの予約
   Game_Event.prototype.reserveDamagePopup = function(delay) {
     this._damagePopupDelay = delay;
     this._damagePopupResult = JSON.parse(JSON.stringify(this.srpgBattler().result()));
   };
-  
+
   // ダメージポップアップが予約されているかを返す
   Game_Event.prototype.isDamagePopupReserved = function() {
     return this._damagePopupDelay !== undefined;
@@ -2061,7 +2098,7 @@ Imported.TMSrpg = true;
     _Game_Event_update.call(this);
     this.updateDamagePopup();
   };
-  
+
   // ダメージポップアップの更新
   Game_Event.prototype.updateDamagePopup = function() {
     if (this.isDamagePopupReserved()) {
@@ -2130,15 +2167,15 @@ Imported.TMSrpg = true;
     var window = $gameTemp.srpgDummyWindow();
     return args.map(window.convertEscapeCharacters, window);
   };
-  
+
   Game_Interpreter.prototype.isSrpgTurnStart = function() {
     return $gameTemp.isSrpgTurnStart();
   };
-  
+
   Game_Interpreter.prototype.isSrpgActorTurn = function() {
     return $gameMap.isSrpgActorTurn();
   };
-  
+
   Game_Interpreter.prototype.srpgNextUnit = function() {
     var id = $gameTemp.srpgNextUnitId();
     return id > 0 ? id : 0;
@@ -2190,7 +2227,7 @@ Imported.TMSrpg = true;
     }
     return 0;
   };
-  
+
   //-----------------------------------------------------------------------------
   // Sprite_Character
   //
@@ -2355,7 +2392,7 @@ Imported.TMSrpg = true;
   //-----------------------------------------------------------------------------
   // Window_SrpgCommand
   //
-  
+
   function Window_SrpgCommand() {
     this.initialize.apply(this, arguments);
   }
@@ -2432,7 +2469,7 @@ Imported.TMSrpg = true;
     var width = this.windowWidth();
     this.move((Graphics.boxWidth - width) / 2, 0, width, this.windowHeight());
   };
-  
+
   Window_SrpgCommand.prototype.processOk = function() {
     Window_SrpgCommand._lastCommandSymbol = this.currentSymbol();
     Window_Command.prototype.processOk.call(this);
@@ -2441,13 +2478,13 @@ Imported.TMSrpg = true;
   Window_SrpgCommand.prototype.selectLast = function() {
     this.selectSymbol(Window_SrpgCommand._lastCommandSymbol);
   };
-  
+
   Window_SrpgCommand.prototype.setSrpgUnit = function(srpgUnit) {
     this._srpgUnit = srpgUnit;
     this.refresh();
     this.activeOpen();
   };
-  
+
   Window_SrpgCommand.prototype.refreshMenu = function() {
     this.clearCommandList();
     this.makeMenuCommandList();
@@ -2465,7 +2502,7 @@ Imported.TMSrpg = true;
     this.activeOpen();
     this.y = y;
   };
-  
+
   //-----------------------------------------------------------------------------
   // Window_SrpgStatus
   //
@@ -2507,7 +2544,7 @@ Imported.TMSrpg = true;
     }
     this.addChildAt(this._targetFaceSprite, 2);
   };
-  
+
   Window_SrpgStatus.prototype.createArrowSprite = function() {
     this._arrowSprite = new Sprite();
     this._arrowSprite.anchor.x = 0.5;
@@ -2517,7 +2554,7 @@ Imported.TMSrpg = true;
     this._arrowSprite.bitmap = ImageManager.loadSystem(srpgStatusArrowImage);
     this.addChild(this._arrowSprite);
   };
-  
+
   Window_SrpgStatus.prototype.setSrpgUnit = function(user) {
     if (user) {
       this.open();
@@ -2529,7 +2566,7 @@ Imported.TMSrpg = true;
     this._target = null;
     this.refresh();
   };
-  
+
   Window_SrpgStatus.prototype.setAction = function(actionObject, target) {
     this._actionObject = actionObject;
     this._target = target;
@@ -2540,15 +2577,15 @@ Imported.TMSrpg = true;
     userBattler.setAction(0, action);
     this.refresh();
   };
-  
+
   Window_SrpgStatus.prototype.user = function() {
     return this._user;
   };
-  
+
   Window_SrpgStatus.prototype.target = function() {
     return this._target;
   };
-  
+
   var _Window_SrpgStatus_update = Window_SrpgStatus.prototype.update;
   Window_SrpgStatus.prototype.update = function() {
     _Window_SrpgStatus_update.call(this);
@@ -2556,7 +2593,7 @@ Imported.TMSrpg = true;
     this._targetFaceSprite.opacity = this.contentsOpacity;
     this.updateArrowSprite();
   };
-  
+
   // 矢印スプライトの更新
   Window_SrpgStatus.prototype.updateArrowSprite = function() {
     if (this._arrowSprite.visible) {
@@ -2565,7 +2602,7 @@ Imported.TMSrpg = true;
       this._arrowSprite.x = this.width / 2 + shiftX;
     }
   };
-  
+
   Window_SrpgStatus.prototype.refresh = function() {
     this.contents.clear();
     if (!this._user) return;
@@ -2592,7 +2629,7 @@ Imported.TMSrpg = true;
       this._arrowSprite.visible = false;
     }
   };
-  
+
   Window_SrpgStatus.prototype.refreshTarget = function() {
     var targetBattler = this._target.srpgBattler();
     var lineHeight = this.lineHeight();
@@ -2611,7 +2648,7 @@ Imported.TMSrpg = true;
     x = this.contents.width - faceWidth - srpgStatusHpWidth;
     this.drawActorGauges(targetBattler, x, lineHeight * 2);
   };
-  
+
   Window_SrpgStatus.prototype.refreshAction = function() {
     var targetBattler = this._target.srpgBattler();
     var action = this._user.srpgBattler().currentAction();
@@ -2622,7 +2659,7 @@ Imported.TMSrpg = true;
     var damageText = this.makeDamageText(targetBattler, action);
     this.drawText(damageText, faceWidth, lineHeight * 1, w, 'center');
   };
-  
+
   // 結果予測テキストを作成
   Window_SrpgStatus.prototype.makeDamageText = function(targetBattler, action) {
     if (action.isSkill() && action.item().id === checkSkillId) return '????(100%)';
@@ -2648,7 +2685,7 @@ Imported.TMSrpg = true;
     if (mrf > 0) result += ' / 反射(' + Math.floor(mrf * 100) + '%)';
     return result;
   };
-  
+
   // 結果予測テキストを作成
   Window_SrpgStatus.prototype.makeEffectText = function(targetBattler, effect, hit) {
     if (!effect) return '効果なし';
@@ -2702,7 +2739,7 @@ Imported.TMSrpg = true;
     this.changeTextColor(this.systemColor());
     this.drawText(moveParam, 360, lineHeight * 3, 120);
   };
-  
+
   Window_SrpgStatus.prototype.setFaceSprite = function(battler, sprite) {
     var faceName  = battler.faceName();
     var faceIndex = battler.faceIndex();
@@ -2712,7 +2749,7 @@ Imported.TMSrpg = true;
     sprite.setFrame(faceIndex % 4 * faceWidth, Math.floor(faceIndex / 4) * faceHeight,
                     faceWidth, faceHeight);
   };
-  
+
   Window_SrpgStatus.prototype.drawActorGauges = function(actor, x, y) {
     this.drawActorHp(actor, x, y, srpgStatusHpWidth);
     y += this.lineHeight();
@@ -2724,7 +2761,7 @@ Imported.TMSrpg = true;
       this.drawActorMp(actor, x, y, srpgStatusHpWidth);
     }
   };
-  
+
   //-----------------------------------------------------------------------------
   // Window_SrpgSkillList
   //
@@ -3023,7 +3060,7 @@ Imported.TMSrpg = true;
     this.createSrpgUnitWindow();
     if (useRegionEffectWindow) this.createSrpgRegionEffectWindow();
   };
-  
+
   Scene_Map.prototype.createHelpWindow = function() {
     this._helpWindow = new Window_Help();
     this._helpWindow.openness = 0;
@@ -3050,19 +3087,19 @@ Imported.TMSrpg = true;
     this.addWindow(this._srpgCommandWindow);
     if ($gameTemp.isSrpgCommandReserved()) this.autoOpen();
   };
-  
+
   // SRPGコマンドウィンドウの復元
   Scene_Map.prototype.autoOpen = function() {
     this.openSrpgCommand($gameTemp.srpgCommandEvent(), true);
     this._srpgCommandWindow.select($gameTemp.srpgCommandIndex());
     $gameTemp.clearSrpgCommand();
   };
-  
+
   Scene_Map.prototype.createSrpgStatusWindow = function() {
     this._srpgStatusWindow = new Window_SrpgStatus();
     this.addWindow(this._srpgStatusWindow);
   };
-  
+
   Scene_Map.prototype.createSrpgSkillWindow = function() {
     var wy = this._helpWindow.height;
     var ww = Graphics.boxWidth / 2;
@@ -3073,7 +3110,7 @@ Imported.TMSrpg = true;
     this._srpgSkillWindow.setHelpWindow(this._helpWindow);
     this.addWindow(this._srpgSkillWindow);
   };
-  
+
   Scene_Map.prototype.createSrpgUnitWindow = function() {
     var wx = srpgCommandX;
     var wy = srpgCommandY;
@@ -3083,7 +3120,7 @@ Imported.TMSrpg = true;
     this._srpgUnitWindow.setStatusWindow(this._srpgStatusWindow);
     this.addWindow(this._srpgUnitWindow);
   };
-  
+
   // 地形効果ウィンドウの作成
   Scene_Map.prototype.createSrpgRegionEffectWindow = function() {
     var wy = this._helpWindow.fittingHeight(2);
@@ -3095,11 +3132,11 @@ Imported.TMSrpg = true;
     this._srpgWaitType = waitType;
     this._srpgWaitCount = waitCount;
   };
-  
+
   Scene_Map.prototype.clearSrpgWait = function() {
     this.setSrpgWait(null, 0);
   };
-  
+
   var _Scene_Map_updateMain = Scene_Map.prototype.updateMain;
   Scene_Map.prototype.updateMain = function() {
     _Scene_Map_updateMain.call(this);
@@ -3120,7 +3157,7 @@ Imported.TMSrpg = true;
       }
     }
   };
-  
+
   // SRPGウェイトの更新
   Scene_Map.prototype.updateSrpgWait = function() {
     if (this._srpgWaitType === 'normal') {
@@ -3180,7 +3217,7 @@ Imported.TMSrpg = true;
     }
     return false;
   };
-  
+
   // 範囲選択の更新
   Scene_Map.prototype.updateAreaSelecter = function() {
     if (TouchInput.isTriggered()){
@@ -3191,7 +3228,7 @@ Imported.TMSrpg = true;
       this.callAreaCancelHandler();
     }
   };
-  
+
   // 味方ターンの更新
   Scene_Map.prototype.updateSrpgActorTurn = function() {
     var event = this._srpgStatusWindow.user();
@@ -3231,7 +3268,7 @@ Imported.TMSrpg = true;
     }
     this._srpgTurnState = 0;
   };
-  
+
   // SRPG入力の更新
   Scene_Map.prototype.updateSrpgInput = function() {
     if (TouchInput.isRepeated()){
@@ -3249,7 +3286,7 @@ Imported.TMSrpg = true;
       SoundManager.playOk();                // 決定効果音を鳴らす
     }
   };
-  
+
   var _Scene_Map_isMenuEnabled = Scene_Map.prototype.isMenuEnabled;
   Scene_Map.prototype.isMenuEnabled = function() {
     // SRPG機能が有効になっている間は通常のメニューを禁止する
@@ -3295,7 +3332,7 @@ Imported.TMSrpg = true;
     this._srpgSkillWindow.selectLast();
     this._srpgSkillWindow.activeOpen();
   };
-  
+
   // SRPGコマンド【移動】
   Scene_Map.prototype.srpgCommandMove = function() {
     this.openSrpgHelp(moveHelp, 1);
@@ -3322,12 +3359,12 @@ Imported.TMSrpg = true;
   Scene_Map.prototype.srpgCommandItem = function() {
     this.openSrpgSkill('item');
   };
-  
+
   // SRPGコマンド【装備変更】
   Scene_Map.prototype.srpgCommandEquip = function() {
     this.changeSceneCommand(Scene_Equip);
   };
-  
+
   // SRPGコマンド【待機】
   Scene_Map.prototype.srpgCommandWaiting = function() {
     var event = this._srpgStatusWindow.user();
@@ -3336,12 +3373,12 @@ Imported.TMSrpg = true;
     this._srpgCommandWindow.close();
     this.setAreaHandler(this.okAreaWaiting, this.cancelAreaWaiting);
   };
-  
+
   // SRPGコマンド【ステータス】
   Scene_Map.prototype.srpgCommandStatus = function() {
     this.changeSceneCommand(Scene_Status);
   };
-  
+
   // SRPGコマンド【ターン終了】
   Scene_Map.prototype.srpgCommandTurnEnd = function() {
     this.openSrpgHelp(turnEndHelp, 1);
@@ -3349,7 +3386,7 @@ Imported.TMSrpg = true;
     this._srpgCommandWindow.setHandler('noCommand', this.srpgCommandTurnEndNo.bind(this));
     this._srpgCommandWindow.refreshYesNo(this._helpWindow.height);
   };
-  
+
   // SRPGコマンド【ユニットリスト】
   Scene_Map.prototype.srpgCommandUnitList = function() {
     this._srpgCommandWindow.close();
@@ -3358,12 +3395,12 @@ Imported.TMSrpg = true;
     this._srpgUnitWindow.changeUnit();
     this._srpgUnitWindow.activeOpen();
   };
-  
+
   // SRPGコマンド【マップ情報】
   Scene_Map.prototype.srpgCommandInfo = function() {
     this.changeSceneCommand(Scene_SrpgInfo);
   };
-  
+
   // SRPGコマンド【オプション】
   Scene_Map.prototype.srpgCommandOptions = function() {
     this.changeSceneCommand(Scene_Options);
@@ -3392,7 +3429,7 @@ Imported.TMSrpg = true;
     this._srpgCommandWindow.close();
     this._srpgTurnState = 3;
   };
-  
+
   // SRPGコマンド【行動：いいえ】
   Scene_Map.prototype.srpgCommandActionNo = function() {
     var event = this._srpgStatusWindow.user();
@@ -3405,7 +3442,7 @@ Imported.TMSrpg = true;
     this._srpgCommandWindow.close();
     this._srpgStatusWindow.setSrpgUnit(event);
   };
-  
+
   // SRPGコマンド【ターン終了：はい】
   Scene_Map.prototype.srpgCommandTurnEndYes = function() {
     this._helpWindow.close();
@@ -3413,21 +3450,21 @@ Imported.TMSrpg = true;
     $gameTemp.clearSrpgNextUnitId();
     this._srpgTurnState = 32;
   };
-  
+
   // SRPGコマンド【ターン終了：いいえ】
   Scene_Map.prototype.srpgCommandTurnEndNo = function() {
     this._helpWindow.close();
     this._srpgCommandWindow.refreshMenu();
     this._srpgCommandWindow.selectSymbol('turnEnd');
   };
-  
+
   // SRPGコマンド【キャンセル】
   Scene_Map.prototype.cancelSrpgCommand = function() {
     this._srpgCommandWindow.close();
     this._srpgStatusWindow.close();
     this.areaSelecterDeactivate(true);
   };
-  
+
   // コマンドによるシーン遷移
   Scene_Map.prototype.changeSceneCommand = function(nextScene) {
     var event = this._srpgStatusWindow.user();
@@ -3437,7 +3474,7 @@ Imported.TMSrpg = true;
     if (this._srpgRegionEffectWindow) this._srpgRegionEffectWindow.hide();
     SceneManager.push(nextScene);
   };
-  
+
   // SRPGスキルウィンドウ【決定】
   Scene_Map.prototype.okSrpgSkill = function() {
     var event = this._srpgStatusWindow.user();
@@ -3446,17 +3483,17 @@ Imported.TMSrpg = true;
     this.setAreaHandler(this.okAreaAction, this.cancelAreaAction);
     $gameMap.showRangeArea(event.x, event.y, this._srpgSkillWindow.item());
   };
-  
+
   // SRPGスキルウィンドウ【キャンセル】
   Scene_Map.prototype.cancelSrpgSkill = function() {
     var event = this._srpgStatusWindow.user();
     this._helpWindow.close();
-    this._srpgSkillWindow.close();    
+    this._srpgSkillWindow.close();
     this._srpgCommandWindow.setSrpgUnit(event);
     $gameMap.showMovableArea(event);
     this.setSimpleMoveInput(event);
   };
-  
+
   // SRPGユニットウィンドウ【決定】
   Scene_Map.prototype.okSrpgUnit = function() {
     var event = this._srpgUnitWindow.item();
@@ -3464,7 +3501,7 @@ Imported.TMSrpg = true;
     this.setSimpleMoveInput(event);
     this._srpgUnitWindow.close();
   };
-  
+
   // SRPGユニットウィンドウ【キャンセル】
   Scene_Map.prototype.cancelSrpgUnit = function() {
     $gameMap.hideSrpgArea();          // 範囲表示を隠す
@@ -3472,12 +3509,12 @@ Imported.TMSrpg = true;
     this._srpgStatusWindow.setSrpgUnit(null);
     this._srpgCommandWindow.activeOpen();
   };
-  
+
   // 範囲選択の有効化
   Scene_Map.prototype.areaSelecterActivate = function() {
     this._areaSelecterActive = true;
   };
-  
+
   // 範囲選択の無効化
   Scene_Map.prototype.areaSelecterDeactivate = function(hide) {
     this._areaSelecterActive = false;
@@ -3485,27 +3522,27 @@ Imported.TMSrpg = true;
     this._areaCancelHandler = null;
     if (hide) $gameMap.hideSrpgArea();
   };
-  
+
   Scene_Map.prototype.setAreaHandler = function(okMethod, cancelMethod) {
     this._areaOkHandler = okMethod;
     this._areaCancelHandler = cancelMethod;
     this.areaSelecterActivate();
   };
-  
+
   Scene_Map.prototype.callAreaOkHandler = function(x, y) {
     if (this._areaOkHandler) {
       this._areaOkHandler(x, y);
       SoundManager.playOk();        // 決定効果音を鳴らす
     }
   };
-  
+
   Scene_Map.prototype.callAreaCancelHandler = function() {
     if (this._areaCancelHandler) {
       this._areaCancelHandler();
       SoundManager.playCancel();    // キャンセル効果音を鳴らす
     }
   };
-  
+
   // 範囲選択の決定【移動】
   Scene_Map.prototype.okAreaMove = function(x, y) {
     var event = this._srpgStatusWindow.user();
@@ -3523,14 +3560,14 @@ Imported.TMSrpg = true;
     $gamePlayer.setSrpgCameraXy(x, y);      // カメラ移動
     this.setSrpgWait('route');              // 移動完了までウェイト
   };
-  
+
   // 範囲選択のキャンセル【移動】
   Scene_Map.prototype.cancelAreaMove = function() {
     this._srpgCommandWindow.activeOpen();
     this._helpWindow.close();
     if (!simpleMoveInput) this.areaSelecterDeactivate(false);
   };
-  
+
   // 範囲選択の決定【待機】
   Scene_Map.prototype.okAreaWaiting = function(x, y) {
     this._srpgStatusWindow.user().executeSrpgWaiting(x, y);
@@ -3560,7 +3597,7 @@ Imported.TMSrpg = true;
     $gameMap.showMovableArea(event);
     this.setSimpleMoveInput(event);
   };
-  
+
   // 範囲選択の決定【行動】
   Scene_Map.prototype.okAreaAction = function(x, y) {
     var event = this._srpgStatusWindow.user();
@@ -3581,14 +3618,14 @@ Imported.TMSrpg = true;
     var events = $gameMap.sortEventsDistance($gameMap.srpgUnitsArea(null, true), x, y);
     this._srpgStatusWindow.setAction(skill, events[0]);
   };
-  
+
   // 範囲選択のキャンセル【行動】
   Scene_Map.prototype.cancelAreaAction = function() {
     this.openSrpgHelp('', 2);
     this._srpgSkillWindow.activeOpen();
     this.areaSelecterDeactivate(true);
   };
-  
+
   // 行動アニメーションの表示
   Scene_Map.prototype.showSrpgActionAnimation = function(event) {
     $gameMap.hideSrpgArea();          // 範囲表示を隠す
@@ -3596,7 +3633,7 @@ Imported.TMSrpg = true;
     event.showSrpgActionAnimation();  // 行動アニメーションの表示
     this.setSrpgWait('animation');    // アニメーション完了までウェイト
   };
-  
+
   // 次に行動するSRPGエネミーユニットをセット
   Scene_Map.prototype.setSrpgNextEnemyUnit = function() {
     if (this._actionEnemyUnits.length > 0) {
@@ -3671,7 +3708,13 @@ Imported.TMSrpg = true;
       break;
     }
   };
-  
+
+
+
+  Scene_Map.prototype.evaluateSrpgEnemyAction = function(event) {
+
+  }
+
   // 敵の行動準備処理
   Scene_Map.prototype.updateSrpgEnemyActionReady = function(event) {
     if (!event.canSrpgAct()) return false;    // 行動不可なら終了
@@ -3684,7 +3727,7 @@ Imported.TMSrpg = true;
     }
     return false;
   };
-  
+
   // 敵の移動準備処理
   Scene_Map.prototype.updateSrpgEnemyMoveReady = function(event) {
     if (event.srpgBattler().isDead()) return false;   // 反撃等で戦闘不能なら終了
