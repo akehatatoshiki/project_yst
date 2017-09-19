@@ -1240,11 +1240,11 @@ Imported.TMSrpg = true;
   // 移動可能範囲を表示する
   Game_Map.prototype.showMovableArea = function(unit) {
     this._srpgArea = {};
+    this._srpgAttackableArea = {};
     this.setupPassableTable(unit);        // 通行判定テーブルをセットアップ
     this.checkMovableArea(unit);          // 移動可能範囲のルートチェック
     this.deleteAreaOverlapEvent();        // すでにイベントがある座標を除外
     this.setColorArea(colorAreaMove);
-    console.log(this._srpgArea);
   };
 
   // 通行判定テーブルをセットアップ
@@ -1257,28 +1257,35 @@ Imported.TMSrpg = true;
       this._passableTable = JSON.parse(JSON.stringify(this._normalTilePassableTable));
     }
     var events = this.srpgUnits(true);
+    // 敵味方を乗り越えて移動できないようにしている
     for (var i = 0, len = events.length; i < len; i++) {
       var event = events[i];
-      if (event.isNormalPriority() && !unit.isFriend(event)) {
+      if (event.isNormalPriority() && unit !== event) {
         for (var j = 0; j < 4; j++) {
-          this._passableTable[event.x][event.y][j] = undefined;
+          // undefinedだと管理が大変なので特殊なのを入れる
+          this._passableTable[event.x][event.y][j] = 'unit';
         }
       }
     }
   };
 
+  Game_Map.prototype.canPass = function(x, y, direction) {
+    if(this._passableTable[x][y][direction] === undefined) return false;
+    if(this._passableTable[x][y][direction] === 'unit') return false;
+    return true;
+  }
+
   // 移動可能範囲のルートチェック
   Game_Map.prototype.checkMovableArea = function(unit) {
     var type = unit.type();
     if (type === '') {
-      this.reateMovableAreaVyMov(unit);
+      this.createMovableAreaByMov(unit);
       return;
     }
     this.createMovableArea(type, unit);
-    console.log(this.srpgBoardInfomation());
   };
 
-  Game_Map.prototype.createMovableAreaVyMov = function(unit) {
+  Game_Map.prototype.createMovableAreaByMov = function(unit) {
     var mov = unit.mov();
     // movはユニットの移動距離
     mov = mov - 1;
@@ -1340,6 +1347,23 @@ Imported.TMSrpg = true;
         this.createCrossArea([1, 1, 1, 1], unit);
         this.createDiagonallyArea([1, 1, 1, 1], unit);
         break;
+      case 'hu_enemy':
+        this.createCrossArea([1, 0, 0, 0], unit);
+        break;
+      case 'kyousya_enemy':
+        this.createCrossArea([9, 0, 0, 0], unit);
+        break;
+      case 'keima_enemy':
+        this.createKnightArea([1, 0, 0, 0, 0, 0, 0, 1], unit);
+        break;
+      case 'gin_enemy':
+        this.createCrossArea([1, 0, 0, 0], unit);
+        this.createDiagonallyArea([1, 1, 1, 1], unit);
+        break;
+      case 'kin_enemy':
+        this.createCrossArea([1, 1, 1, 1], unit);
+        this.createDiagonallyArea([1, 0, 0, 1], unit);
+        break;
       default:
         this.createMovableAreaVyMov(unit);
     }
@@ -1395,8 +1419,8 @@ Imported.TMSrpg = true;
       var x = data[0];
       var y = data[1];
       var key = '' + x + ',' + y;
-      if (!(data[2] < max_x && data[3] < max_y && data[2] > -1 && data[3] > -1) ) continue;
-      if (this._passableTable[data[2]][data[3]][data[4]] && data[7] > 0 &&
+      if (this._passableTable[data[0]][data[1]][data[4]] === undefined) continue;
+      if (this.canPass(data[2], data[3], data[4]) && data[7] > 0 &&
           (!this._srpgArea[key] || (data[5] + data[6]).length <= this._srpgArea[key].length)) {
         this._srpgArea[key] = (data[5] + data[6]);
         if (data[7] > 0) {
@@ -1434,8 +1458,8 @@ Imported.TMSrpg = true;
       var x = data[0];
       var y = data[1];
       var key = '' + x + ',' + y;
-      if (!(data[2] < max_x && data[3] < max_y && data[2] > -1 && data[3] > -1) ) continue;
-      if (this._passableTable[data[2]][data[3]][data[4]] && data[6] > 0 &&
+      if (this._passableTable[data[0]][data[1]][data[4]] === undefined) continue;
+      if (this.canPass(data[2], data[3], data[4]) && data[6] > 0 &&
           (!this._srpgArea[key] || data[5].length <= this._srpgArea[key].length)) {
         this._srpgArea[key] = data[5];
       }
@@ -1525,7 +1549,8 @@ Imported.TMSrpg = true;
     var events = this.events();
     for (var i = 0; i < events.length; i++) {
       var event = events[i];
-      if (event.isNormalPriority() && !event.isThrough()) {
+      // 将棋なので敵は「重ねる」ことができる
+      if (event.isNormalPriority() && !event.isThrough() && event.isSrpgActorUnit(true)) {
         delete this._srpgArea['' + event.x + ',' + event.y];
       }
     };
@@ -1933,6 +1958,24 @@ Imported.TMSrpg = true;
     this._lastPosition = {x:this._x, y:this._y, direction:this.direction()};
     this._moved = true;     // 移動済みフラグを立てる
   };
+
+  // 敵破壊
+  Game_Event.prototype.destroyEnemy = function() {
+    var events = $gameMap.events();
+    var unit = this;
+    var target = events.find(function(tgt){
+      return (tgt._eventId != unit._eventId && tgt.x == unit._x && tgt.y == unit._y);
+    });
+    console.log(target);
+    if (target) {
+      var battler = target.srpgBattler();
+      battler.addState(battler.deathStateId());
+      $gameTemp.setSrpgDeadUnitId(target._eventId);
+      target.requestAnimation(1);
+      return true;
+    }
+    return false;
+  }
 
   // 移動キャンセル
   Game_Event.prototype.backToLastPosition = function() {
@@ -2436,9 +2479,9 @@ Imported.TMSrpg = true;
         this.addCommand(moveCommand, 'move', true);
       } else {
         var enabled = this._srpgUnit.isLastPositionValid();
-        this.addCommand(moveCancelCommand, 'moveCancel', enabled);
+        // this.addCommand(moveCancelCommand, 'moveCancel', enabled);
       }
-      this.addCommand(actionCommand, 'action', canAct);
+      // this.addCommand(actionCommand, 'action', canAct);
       if (itemCommand) this.addCommand(itemCommand, 'item', canAct);
       if (equipCommand) this.addCommand(equipCommand, 'equip', canAct);
       if (waitingCommand) {
@@ -3248,6 +3291,8 @@ Imported.TMSrpg = true;
     case 12:  // 移動結果の反映
       this._srpgStatusWindow.refresh();
       this.srpgAutoWaiting(!event.canSrpgAct());
+      event.destroyEnemy();
+      this.srpgAutoWaiting(true);
       break;
     case 32:  // ターン開始待ち
       $gameMap.onSrpgTurnStart();
@@ -3296,6 +3341,7 @@ Imported.TMSrpg = true;
   // SRPGコマンドウィンドウを開く
   Scene_Map.prototype.openSrpgCommand = function(event, showArea) {
     this._srpgStatusWindow.setSrpgUnit(event);
+    this._srpgStatusWindow.hide();
     if (event) {
       this._srpgCommandWindow.setSrpgUnit(event);
       if (showArea) {
@@ -3368,10 +3414,11 @@ Imported.TMSrpg = true;
   // SRPGコマンド【待機】
   Scene_Map.prototype.srpgCommandWaiting = function() {
     var event = this._srpgStatusWindow.user();
-    $gameMap.showWaitingArea(event);
-    this.openSrpgHelp(waitingHelp, 1);
+    //$gameMap.showWaitingArea(event);
+    //this.openSrpgHelp(waitingHelp, 1);
     this._srpgCommandWindow.close();
-    this.setAreaHandler(this.okAreaWaiting, this.cancelAreaWaiting);
+    this.okAreaWaiting(event._x, event._y);
+    //this.setAreaHandler(this.okAreaWaiting, this.cancelAreaWaiting);
   };
 
   // SRPGコマンド【ステータス】
