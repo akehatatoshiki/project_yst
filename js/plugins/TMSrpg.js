@@ -1271,6 +1271,7 @@ Imported.TMSrpg = true;
 
   Game_Map.prototype.canPass = function(x, y, direction) {
     if(this._passableTable[x][y][direction] === undefined) return false;
+    if(this._passableTable[x][y][direction] === null) return false;
     if(this._passableTable[x][y][direction] === 'unit') return false;
     return true;
   }
@@ -1386,7 +1387,7 @@ Imported.TMSrpg = true;
       var y = data[1];
       var key = '' + x + ',' + y;
       // this._srpgArea['1,2'] = '11' の '11' は移動経路を示す(下: 1 左: 2 右: 3 上: 4)
-      if (this._passableTable[data[2]][data[3]][data[4]] && data[6] > 0 &&
+      if (this.canPass(data[2], data[3], data[4]) && data[6] > 0 &&
           (!this._srpgArea[key] || data[5].length <= this._srpgArea[key].length)) {
         this._srpgArea[key] = data[5];
         if (data[6] > 0) {
@@ -1458,7 +1459,7 @@ Imported.TMSrpg = true;
       var x = data[0];
       var y = data[1];
       var key = '' + x + ',' + y;
-      if (this._passableTable[data[0]][data[1]][data[4]] === undefined) continue;
+      if (this._passableTable[data[0]][data[1]] === undefined) continue;
       if (this.canPass(data[2], data[3], data[4]) && data[6] > 0 &&
           (!this._srpgArea[key] || data[5].length <= this._srpgArea[key].length)) {
         this._srpgArea[key] = data[5];
@@ -1941,21 +1942,12 @@ Imported.TMSrpg = true;
     return this._srpgDestination;
   };
 
-  // 文字列から移動ルートを生成して移動する
-  Game_Event.prototype.moveRouteText = function(routeText) {
-    var gc = Game_Character;
-    var moveRoute = {list:[], repeat:false, skippable:false, wait:true};
-    moveRoute.list.push({code:gc.ROUTE_THROUGH_ON, parameters:[]});
-    moveRoute.list.push({code:gc.ROUTE_CHANGE_SPEED, parameters:[5]});
-    while (routeText.length > 0) {
-      moveRoute.list.push({code:+routeText.slice(0, 1), parameters:[]});
-      routeText = routeText.slice(1);
-    }
-    moveRoute.list.push({code:gc.ROUTE_THROUGH_OFF, parameters:[]});
-    moveRoute.list.push({code:gc.ROUTE_CHANGE_SPEED, parameters:[3]});
-    moveRoute.list.push({code:gc.ROUTE_END, parameters:[]});
-    this.forceMoveRoute(moveRoute);
+  // 座標を指定して移動する
+  Game_Event.prototype.moveRouteText = function(x, y) {
+    this.locate(x, y);
     this._lastPosition = {x:this._x, y:this._y, direction:this.direction()};
+    // 効果音
+    AudioManager.playSe({"name":"Blow3","volume":90,"pitch":100,"pan":0})
     this._moved = true;     // 移動済みフラグを立てる
   };
 
@@ -3601,8 +3593,7 @@ Imported.TMSrpg = true;
   };
 
   Scene_Map.prototype.setSrpgMove = function(event, x, y) {
-    var routeText = $gameMap.srpgAreaXy(x, y);
-    event.moveRouteText(routeText);         // 移動を実行
+    event.moveRouteText(x, y);         // 移動を実行
     event.refreshRegionEffect(event._x, event._y, x, y);  //地形効果をリフレッシュ
     $gamePlayer.setSrpgCameraXy(x, y);      // カメラ移動
     this.setSrpgWait('route');              // 移動完了までウェイト
