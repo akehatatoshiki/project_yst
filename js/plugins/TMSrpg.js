@@ -1309,11 +1309,15 @@ Imported.TMSrpg = true;
   // 移動可能範囲のルートチェック
   Game_Map.prototype.checkMovableArea = function(unit) {
     var type = unit.type();
+    var grow = unit.grow();
     if (type === '') {
       this.createMovableAreaByMov(unit);
       return;
+    } else if ($gameSelfSwitches.value([$gameMap._mapId, unit._eventId, 'C'])) {
+      this.createMovableArea(grow, unit);
+    } else {
+      this.createMovableArea(type, unit);
     }
-    this.createMovableArea(type, unit);
   };
 
   Game_Map.prototype.createMovableAreaByMov = function(unit) {
@@ -1810,7 +1814,6 @@ Imported.TMSrpg = true;
       if (actor) {
         this.initSrpgUnitSetting();
         this._srpgActorId = srpgActorId;
-        this.setImage(actor.characterName(), actor.characterIndex());
       } else {
         this.erase();
       }
@@ -1914,6 +1917,11 @@ Imported.TMSrpg = true;
     return this.srpgBattler().srpgParam('type', 'string');
   };
 
+  // イベントの成り後タイプを返す
+  Game_Event.prototype.grow = function() {
+    return this.srpgBattler().srpgParam('grow', 'string');
+  };
+
   // イベントの索敵距離を返す
   Game_Event.prototype.search = function() {
     return this.srpgBattler().srpgParam('search');
@@ -2013,7 +2021,7 @@ Imported.TMSrpg = true;
       return true;
     }
     return false;
-  }
+  };
 
   // 移動キャンセル
   Game_Event.prototype.backToLastPosition = function() {
@@ -3362,6 +3370,7 @@ Imported.TMSrpg = true;
       this._srpgStatusWindow.refresh();
       this.srpgAutoWaiting(!event.canSrpgAct());
       event.destroyEnemy();
+      this.growUnit(event);
       this.srpgAutoWaiting(true);
       break;
     case 32:  // ターン開始待ち
@@ -3372,6 +3381,15 @@ Imported.TMSrpg = true;
       this._actionEnemyUnits = $gameMap.sortEventsAgi(events);
       this._srpgTurnState = 31;
       break;
+    }
+  };
+
+  Scene_Map.prototype.growUnit = function(unit) {
+    var y = unit._y;
+    var is_friend = unit.isSrpgActorUnit(true) ? 1 : -1
+    var grow_area_y = unit.isSrpgActorUnit(true) ? 4 : 6
+    if(((y-grow_area_y)*is_friend) < 0) {
+      unit.setSelfSwitch('C', true);
     }
   };
 
