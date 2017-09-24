@@ -245,7 +245,7 @@ function Game_PrefabEvent() {
     Game_Interpreter.prototype.execMakeEvent = function(args, extend) {
         var x = getArgFloat(args[1]);
         var y = getArgFloat(args[2]);
-        $gameMap.spawnEvent(this.getEventIdForEventReSpawn(args[0], extend), x, y, extend);
+        return $gameMap.spawnEvent(this.getEventIdForEventReSpawn(args[0], extend), x, y, extend);
     };
 
     Game_Interpreter.prototype.execMakeEventRandom = function(args, extend) {
@@ -301,6 +301,7 @@ function Game_PrefabEvent() {
             var event   = new Game_PrefabEvent(this._mapId, eventId, originalEventId, x, y, isTemplate);
             this._lastSpawnEventId = eventId;
             this._events.push(event);
+            return event._eventId;
         } else {
             throw new Error('無効なイベントIDもしくは座標のためイベントを作成できませんでした。');
         }

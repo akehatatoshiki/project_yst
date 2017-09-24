@@ -1033,6 +1033,14 @@ Imported.TMSrpg = true;
     return this.event(this._srpgManagerEventId);
   };
 
+  // イベント名からSRPGイベントを返す
+  Game_Map.prototype.srpgEventFindByName = function(name) {
+    var event = DataManager.searchDataItem($dataMap.events, 'name', name);
+    if(event === undefined) return;
+    var eventId = event.id;
+    return this.event(eventId);
+  };
+
   // SRPG管理イベントを起動する
   Game_Map.prototype.startSrpgManagerEvent = function() {
     this.srpgManagerEvent().start();
@@ -1240,7 +1248,6 @@ Imported.TMSrpg = true;
   // 移動可能範囲を表示する
   Game_Map.prototype.showMovableArea = function(unit) {
     this._srpgArea = {};
-    this._srpgAttackableArea = {};
     this.setupPassableTable(unit);        // 通行判定テーブルをセットアップ
     this.checkMovableArea(unit);          // 移動可能範囲のルートチェック
     this.deleteAreaOverlapEvent();        // すでにイベントがある座標を除外
@@ -1269,10 +1276,33 @@ Imported.TMSrpg = true;
     }
   };
 
+  // 設置判定テーブルをセットアップ
+  Game_Map.prototype.setupSetableTable = function() {
+    var area = {};
+    this._passableTable = JSON.parse(JSON.stringify(this._normalTilePassableTable));
+    for(var x = 0; x < 10; x++) {
+      for(var y = 0; y < 10; y++) {
+        for(var d = 0; d < 5; d++) {
+          if(this.canSet(x, y, d)) {
+            var key = '' + x + ',' + y;
+            area[key] = '' + d;
+          }
+        }
+      }
+    }
+    return area;
+  };
+
   Game_Map.prototype.canPass = function(x, y, direction) {
     if(this._passableTable[x][y][direction] === undefined) return false;
     if(this._passableTable[x][y][direction] === null) return false;
     if(this._passableTable[x][y][direction] === 'unit') return false;
+    return true;
+  }
+
+  Game_Map.prototype.canSet = function(x, y, direction) {
+    if(this._passableTable[x][y][direction] === undefined) return false;
+    if(this._passableTable[x][y][direction] === null) return false;
     return true;
   }
 
@@ -1366,7 +1396,7 @@ Imported.TMSrpg = true;
         this.createDiagonallyArea([1, 0, 0, 1], unit);
         break;
       default:
-        this.createMovableAreaVyMov(unit);
+        this.createMovableAreaByMov(unit);
     }
   };
   // ----------- 地獄はここで終わりだ ---------------
@@ -1479,8 +1509,18 @@ Imported.TMSrpg = true;
     this.setColorArea(colorAreaRange);
   };
 
+  // 設置可能範囲を表示する
+  Game_Map.prototype.showSetableArea = function() {
+    var area = this.setupSetableTable();        // 設置判定テーブルをセットアップ
+    area = this.deleteAreaOverlapEvent(area);   // すでにイベントがある座標を除外
+    return area;
+  };
+
   // 射程範囲を作成する
   Game_Map.prototype.createRangeArea = function(x, y, skill) {
+    if(skill && skill.meta.type === 'summon') {
+      return this.showSetableArea();
+    }
     var a = (skill.meta.range || 'diamond 1').split(' ');
     return this.createArea(x, y, a);
   };
@@ -1546,15 +1586,21 @@ Imported.TMSrpg = true;
   };
 
   // 範囲からすでにイベントがある座標を除外
-  Game_Map.prototype.deleteAreaOverlapEvent = function() {
+  Game_Map.prototype.deleteAreaOverlapEvent = function(area) {
+    var _area = area;
     var events = this.events();
     for (var i = 0; i < events.length; i++) {
       var event = events[i];
-      // 将棋なので敵は「重ねる」ことができる
-      if (event.isNormalPriority() && !event.isThrough() && event.isSrpgActorUnit(true)) {
-        delete this._srpgArea['' + event.x + ',' + event.y];
+      if(_area) {
+        if (event.isNormalPriority() && !event.isThrough()) delete _area['' + event.x + ',' + event.y];
+      } else {
+        // 将棋なので敵は「重ねる」ことができる
+        if (event.isNormalPriority() && !event.isThrough() && event.isSrpgActorUnit(true)) {
+          delete this._srpgArea['' + event.x + ',' + event.y];
+        }
       }
     };
+    if(_area) return _area;
   };
 
   // 範囲が空かどうかを返す
@@ -1759,6 +1805,7 @@ Imported.TMSrpg = true;
     var srpgActorId = this.event().meta.srpgActor;
     if (srpgActorId) {
       this.setSelfSwitch('A', false);
+      this.setSelfSwitch('B', true);
       var actor = $gameActors.actor(srpgActorId);
       if (actor) {
         this.initSrpgUnitSetting();
@@ -1958,7 +2005,6 @@ Imported.TMSrpg = true;
     var target = events.find(function(tgt){
       return (tgt._eventId != unit._eventId && tgt.x == unit._x && tgt.y == unit._y);
     });
-    console.log(target);
     if (target) {
       var battler = target.srpgBattler();
       battler.addState(battler.deathStateId());
@@ -2036,8 +2082,10 @@ Imported.TMSrpg = true;
     var subject = this.srpgBattler();
     var targets = $gameMap.srpgUnitsArea(null, true);
     var action = subject.currentAction();
-    var item = action.item();
-    var animationId = subject.srpgActionAnimationId(item);
+    if(action) {
+      var item = action.item();
+      var animationId = subject.srpgActionAnimationId(item);
+    }
     subject.useItem(item);      // コストの支払い
     for (var i = 0; i < targets.length; i++) {
       targets[i].requestAnimation(animationId);
@@ -2238,6 +2286,24 @@ Imported.TMSrpg = true;
     return false;
   };
 
+  // ユニット撃破時に駒追加
+  Game_Interpreter.prototype.addSrpgUnitStock = function(eventId) {
+    if (eventId == null) eventId = Math.abs($gameTemp.srpgNextUnitId());
+    var event = this.character(eventId);
+    var type = event.type();
+    if(type === undefined) return;
+    type = type.replace("_enemy", "");
+    var target = $dataItems.find(function(item) {
+      if(item && item.meta){
+        return item.meta.unit === "EV_" + type;
+      } 
+      else {
+        return false;
+      }
+    })
+    $gameParty.gainItem(target, 1)
+  };
+
   Game_Interpreter.prototype.srpgAddUnit = function(eventId, enemyId) {
     var event = $gameMap.event(eventId);
     if (event && !event.isSrpgUnit()) {
@@ -2261,6 +2327,18 @@ Imported.TMSrpg = true;
       return actor.srpgEventId();
     }
     return 0;
+  };
+
+  Game_Interpreter.prototype.spawnSrpgUnit = function(event_name) {
+    $gameMap.showSetableArea();
+    if (TouchInput.isTriggered()){
+      var x = $gameMap.canvasToMapX(TouchInput.x);
+      var y = $gameMap.canvasToMapY(TouchInput.y);
+      if ($gameMap.isInsideArea(x, y)) this.pluginCommand('ERS_MAKE', [event_name, x, y]);
+      return true;
+    } else if (TouchInput.isCancelled()) {
+      return false;
+    }
   };
 
   //-----------------------------------------------------------------------------
@@ -3406,11 +3484,8 @@ Imported.TMSrpg = true;
   // SRPGコマンド【待機】
   Scene_Map.prototype.srpgCommandWaiting = function() {
     var event = this._srpgStatusWindow.user();
-    //$gameMap.showWaitingArea(event);
-    //this.openSrpgHelp(waitingHelp, 1);
     this._srpgCommandWindow.close();
     this.okAreaWaiting(event._x, event._y);
-    //this.setAreaHandler(this.okAreaWaiting, this.cancelAreaWaiting);
   };
 
   // SRPGコマンド【ステータス】
@@ -3640,10 +3715,12 @@ Imported.TMSrpg = true;
   Scene_Map.prototype.okAreaAction = function(x, y) {
     var event = this._srpgStatusWindow.user();
     $gameTemp.reserveSrpgCommand(this._srpgCommandWindow.index(), event);   // コマンドウィンドウの復元予約
-    this.openSrpgHelp(actionEffectHelp, 1);
-    this._srpgCommandWindow.setHandler('yesCommand', this.srpgCommandActionYes.bind(this));
-    this._srpgCommandWindow.setHandler('noCommand', this.srpgCommandActionNo.bind(this));
-    this._srpgCommandWindow.refreshYesNo(this._helpWindow.height);
+    // 可能ならキャンセルできるのが望ましい ---------
+    // this.openSrpgHelp(actionEffectHelp, 1);
+    // this._srpgCommandWindow.setHandler('yesCommand', this.srpgCommandActionYes.bind(this));
+    // this._srpgCommandWindow.setHandler('noCommand', this.srpgCommandActionNo.bind(this));
+    // this._srpgCommandWindow.refreshYesNo(this._helpWindow.height);
+    // ---------
     this.areaSelecterDeactivate(false);
     this._lastUnitDirection = event.direction();// 現在の向きを記憶
     this.setSrpgAction(event, this._srpgSkillWindow.item(), x, y);
@@ -3653,9 +3730,22 @@ Imported.TMSrpg = true;
     $gameMap.showEffectArea(x, y, skill);       // 効果範囲の表示
     event.turnTowardXy(x, y);                   // 実行先の座標を向く
     $gamePlayer.setSrpgCameraXy(x, y);          // カメラ移動
+    if(skill.meta.type === 'summon') {
+      this.srpgSummonUnit(skill, x, y);
+    }
     var events = $gameMap.sortEventsDistance($gameMap.srpgUnitsArea(null, true), x, y);
     this._srpgStatusWindow.setAction(skill, events[0]);
   };
+
+  Scene_Map.prototype.srpgSummonUnit = function(skill, x, y) {
+    var event_name = skill.meta.unit;
+    var event = $gameMap.srpgEventFindByName(event_name);
+    Game_Interpreter.prototype.srpgAddUnit(Game_Interpreter.prototype.execMakeEvent([event._eventId, x, y], false));
+    this._srpgStatusWindow.refresh();
+    this._helpWindow.close();
+    this.areaSelecterDeactivate(true);
+    this._srpgTurnState = 3;
+  }
 
   // 範囲選択のキャンセル【行動】
   Scene_Map.prototype.cancelAreaAction = function() {
@@ -3818,5 +3908,6 @@ Imported.TMSrpg = true;
     this._statusWindow.setHandler('cancel',   this.popScene.bind(this));
     this.addWindow(this._statusWindow);
   };
+  
 
 })();
