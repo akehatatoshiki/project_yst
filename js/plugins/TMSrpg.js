@@ -1682,6 +1682,25 @@ Imported.TMSrpg = true;
     return result;
   };
 
+  Game_Map.prototype.isOuAlive = function() {
+    var events = this.events();
+    var is_alive = events.find(function(unit) {
+      if(!unit.srpgBattler()) return false;
+      if(!unit.srpgBattler().isActor()) return false;
+      var type = unit.type();
+      if(type && type === 'ou' && !$gameTemp._srpgDeadUnitIds.includes(unit._eventId)) {
+        return unit.eventId;
+      }
+      return false;
+    });
+
+    if(is_alive) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   //-----------------------------------------------------------------------------
   // Game_CharacterBase
   //
@@ -2310,6 +2329,19 @@ Imported.TMSrpg = true;
       }
     })
     $gameParty.gainItem(target, 1)
+  };
+
+  // ユニット撃破時にダメージ
+  Game_Interpreter.prototype.addDamage = function(eventId, target) {
+    if (eventId == null) eventId = Math.abs($gameTemp.srpgNextUnitId());
+    var event = this.character(eventId);
+    // var damage = ..
+    // TODO: ダメージ決まったらここで入れる
+    if (target == 'actor') {
+      $gameVariables.setValue(10, 0);
+    } else {
+      $gameVariables.setValue(11, 0);
+    }
   };
 
   Game_Interpreter.prototype.srpgAddUnit = function(eventId, enemyId) {
@@ -3329,10 +3361,13 @@ Imported.TMSrpg = true;
 
   // ゲームオーバー判定
   Scene_Map.prototype.checkSrpgGameOver = function() {
-    if ($gameVariables.value(vnEnemyUnitNums) === 0) {
+    var enemys = $gameVariables.value(vnEnemyUnitNums);
+    var allies = $gameVariables.value(vnActorUnitNums);
+    var ou_alive = $gameMap.isOuAlive();
+    if (enemys === 0) {
       $gameMap.srpgManagerEvent().srpgAutoStart('A');
       return true;
-    } else if ($gameVariables.value(vnActorUnitNums) === 0) {
+    } else if (allies === 0 || !ou_alive) {
       $gameMap.srpgManagerEvent().srpgAutoStart('B');
       return true;
     }
@@ -3389,9 +3424,18 @@ Imported.TMSrpg = true;
     var is_friend = unit.isSrpgActorUnit(true) ? 1 : -1
     var grow_area_y = unit.isSrpgActorUnit(true) ? 4 : 6
     if(((y-grow_area_y)*is_friend) < 0) {
-      unit.setSelfSwitch('C', true);
+      // TODO: 余裕があれば選択肢出す
+      this.yesGrowUnit(unit);
     }
   };
+
+  Scene_Map.prototype.yesGrowUnit = function(unit) {
+    unit.setSelfSwitch('C', true);
+  }
+
+  Scene_Map.prototype.noGrowUnit = function(unit) {
+    unit.setSelfSwitch('C', false);
+  }
 
   Scene_Map.prototype.srpgAutoWaiting = function(flag) {
     this.openSrpgCommand(this._srpgStatusWindow.user(), !flag);
@@ -3854,8 +3898,6 @@ Imported.TMSrpg = true;
       break;
     }
   };
-
-
 
   Scene_Map.prototype.evaluateSrpgEnemyAction = function(event) {
 
