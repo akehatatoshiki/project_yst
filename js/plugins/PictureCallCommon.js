@@ -214,7 +214,7 @@
  * @param AlwaysCommonInBattle
  * @desc Always execute common event in battle(ON/OFF)
  * @default OFF
- *
+ * 
  * @help When clicked picture, call common event.
  *
  * Plugin Command
