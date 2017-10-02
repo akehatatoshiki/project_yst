@@ -10,5 +10,6 @@ var $plugins =
 {"name":"NobleMushroom","status":false,"description":"ノベルゲーム総合プラグイン","parameters":{"表示タイプ初期値":"0","タイトル表示タイプ":"1","コマンド単位ウェイト":"ON","表示速度変数":"1","表示速度初期値":"1","クリック瞬間表示":"ON","クリック範囲限定":"OFF","自動改行":"ON","相対フォントサイズ":"6","明朝体表示":"ON","ゴシック体表示":"OFF","固有フォント表示":"","選択肢接頭辞":"0","画面横サイズ":"0","画面縦サイズ":"0","モバイル画面横サイズ":"0","モバイル画面縦サイズ":"0","モバイルモード":"OFF","オートセーブ":"ON","ポーズ可能":"ON","オートセーブ名称":"オートセーブ","ロードコマンド":"ロード","Qセーブコマンド":"クイックセーブ","Qロードコマンド":"クイックロード"}},
 {"name":"AdjustPictureGraphical","status":true,"description":"ピクチャのグラフィカルな位置調整プラグイン。\nパラメータを変更したら「プロジェクトの保存」（Ctrl+S）","parameters":{"グリッドサイズ":"48","テストマップID":"-1"}},
 {"name":"MPP_ChoiceEX","status":true,"description":"【ver.3.5】選択肢の機能拡張","parameters":{"maxPageRow":"6"}},
-{"name":"PictureCallCommon","status":true,"description":"ピクチャのボタン化プラグイン","parameters":{"透明色を考慮":"ON","ピクチャ番号の変数番号":"0","ポインタX座標の変数番号":"0","ポインタY座標の変数番号":"0","タッチ操作抑制":"OFF","戦闘中常にコモン実行":"OFF"}}
+{"name":"PictureCallCommon","status":true,"description":"ピクチャのボタン化プラグイン","parameters":{"透明色を考慮":"ON","ピクチャ番号の変数番号":"0","ポインタX座標の変数番号":"0","ポインタY座標の変数番号":"0","タッチ操作抑制":"OFF","戦闘中常にコモン実行":"OFF"}},
+{"name":"BackLog_utf8","status":true,"description":"バックログ及びメッセージ周りの補填関係","parameters":{"nBackLogDisplayLine":"12","nBackLogLimitMax":"-1","nBackLogButtonUp":"0","nBackLogButtonDown":"0","nBackLogButtonHide":"0","bBackLogNameOn_forYepMessageCore":"true","bBackLogNameOn_Flame":"●","bBackLogNameOn_Flame2":"","sBackLogNoFaceSymbol":"★","sBackLogNoFaceSpace":""}}
 ];
