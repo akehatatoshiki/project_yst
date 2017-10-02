@@ -1399,6 +1399,248 @@ Imported.TMSrpg = true;
         this.createCrossArea([1, 1, 1, 1], unit);
         this.createDiagonallyArea([1, 0, 0, 1], unit);
         break;
+      // Cランク
+      case 'inu':
+        this.createCrossArea([0, 0, 0, 1], unit);
+        this.createDiagonallyArea([0, 1, 1, 0], unit);
+        break;
+      case 'suisyou':
+        this.createCrossArea([9, 1, 1, 9], unit);
+        this.createDiagonallyArea([0, 9, 9, 0], unit);
+        break;
+      case 'husyou':
+        this.createCrossArea([1, 0, 0, 3], unit);
+        this.createDiagonallyArea([0, 1, 1, 0], unit);
+        break;
+      case 'bouhu':
+        this.createCrossArea([9, 1, 1, 9], unit);
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        break;
+      case 'hibyou':
+        // 特殊なのであと
+        break;
+      case 'myouzin':
+        this.createDiagonallyArea([1, 1, 1, 1], unit);
+        break;
+      case 'honmyou':
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        break;
+      case 'kongou':
+        this.createCrossArea([3, 3, 3, 3], unit);
+        break;
+      case 'siten':
+        this.createCrossArea([4, 4, 4, 4], unit);
+        this.createDiagonallyArea([4, 4, 4, 4], unit);
+        break;
+      case 'rikisi':
+        this.createDiagonallyArea([3, 3, 3, 3], unit);
+        break;
+      // Bランク
+      case 'seiryu':
+        this.createCrossArea([9, 2, 2, 9], unit);
+        this.createDiagonallyArea([0, 0, 9, 0], unit);
+        break;
+      case 'sinryu':
+        this.createCrossArea([9, 2, 9, 9], unit);
+        this.createDiagonallyArea([0, 0, 9, 0], unit);
+        break;
+      case 'ouryu':
+        this.createCrossArea([0, 9, 9, 9], unit);
+        break;
+      case 'souryu':
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        this.createCrossArea([5, 9, 9, 9], unit);
+        break;
+      case 'genbu':
+        this.createCrossArea([1, 1, 1, 1], unit);
+        this.createDiagonallyArea([9, 0, 9, 0], unit);
+        break;
+      case 'sinki':
+        this.createCrossArea([1, 1, 1, 1], unit);
+        this.createDiagonallyArea([9, 0, 9, 9], unit);
+        break;
+      case 'henri':
+        this.createCrossArea([2, 2, 2, 2], unit);
+        break;
+      case 'kyuban':
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        this.createCrossArea([2, 2, 2, 2], unit);
+        break;
+      case 'sigyou':
+        this.createCrossArea([0, 0, 0, 1], unit);
+        this.createDiagonallyArea([1, 0, 0, 1], unit);
+        break;
+      case 'unzyu':
+        this.createCrossArea([9, 1, 1, 9], unit);
+        this.createDiagonallyArea([0, 3, 3, 0], unit);
+        break;
+      case 'basyou':
+        this.createCrossArea([1, 0, 0, 3], unit);
+        this.createDiagonallyArea([0, 1, 1, 0], unit);
+        break;
+      case 'honbaku':
+        this.createCrossArea([9, 2, 2, 9], unit);
+        this.createDiagonallyArea([1, 9, 9, 1], unit);
+        break;
+      case 'byakko':
+        this.createCrossArea([2, 9, 9, 2], unit);
+        this.createDiagonallyArea([0, 9, 0, 0], unit);
+        break;
+      case 'sinko':
+        this.createCrossArea([2, 9, 9, 9], unit);
+        this.createDiagonallyArea([0, 9, 0, 0], unit);
+        break;
+      case 'kotetu':
+        this.createCrossArea([0, 1, 1, 0], unit);
+        this.createDiagonallyArea([2, 2, 2, 2], unit);
+        break;
+      case 'tengu':
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        //二回行動
+        break;
+      case 'rasetu':
+        this.createDiagonallyArea([0, 9, 9, 0], unit);
+        this.createCrossArea([1, 1, 1, 0], unit);
+        break;
+      case 'inko':
+        this.createCrossArea([9, 0, 0, 9], unit);
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        break;
+      case 'sankotu':
+        this.createCrossArea([9, 9, 9, 9], unit);
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        break;
+      case 'yasya':
+        this.createCrossArea([1, 3, 3, 0], unit);
+        this.createDiagonallyArea([0, 1, 1, 0], unit);
+        break;
+      case 'suzaku':
+        this.createCrossArea([1, 1, 1, 1], unit);
+        this.createDiagonallyArea([1, 9, 1, 9], unit);
+        break;
+      case 'sinzyaku':
+        this.createCrossArea([1, 1, 1, 1], unit);
+        this.createDiagonallyArea([9, 9, 1, 9], unit);
+        break;
+      case 'happoukei':
+        this.createKnightArea([1, 1, 1, 1, 1, 1, 1, 1], unit);
+        break;
+      case 'happounarikei':
+        this.createKnightArea([1, 1, 1, 1, 1, 1, 1, 1], unit);
+        this.createCrossArea([1, 1, 1, 1], unit);
+        this.createDiagonallyArea([0, 1, 1, 0], unit);
+        break;
+      case 'taikyokuou':
+        this.createCrossArea([2, 2, 2, 2], unit);
+        this.createDiagonallyArea([2, 2, 2, 2], unit);
+        break;
+      case 'unzyu':
+        this.createCrossArea([9, 1, 1, 9], unit);
+        this.createDiagonallyArea([0, 3, 3, 0], unit);
+        break;
+      case 'keizyu':
+        this.createCrossArea([9, 9, 9, 9], unit);
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        break;
+      case 'huuma':
+        this.createCrossArea([2, 0, 0, 9], unit);
+        this.createDiagonallyArea([0, 1, 1, 0], unit);
+        break;
+      case 'tenma':
+        this.createCrossArea([0, 0, 0, 9], unit);
+        // 特殊　上下桂馬の動きで飛べる
+        break;
+      case 'toui':
+        this.createCrossArea([2, 1, 1, 2], unit);
+        this.createDiagonallyArea([0, 1, 1, 0], unit);
+        break;
+      case 'sisi':
+        this.createCrossArea([1, 1, 1, 1], unit);
+        this.createDiagonallyArea([1, 1, 1, 1], unit);
+        //二回行動
+        break;
+      case 'kasyou':
+        this.createCrossArea([3, 0, 0, 3], unit);
+        this.createDiagonallyArea([0, 1, 1, 0], unit);
+        break;
+      case 'taisyou':
+        // 特殊　飛び越し取り
+        this.createCrossArea([9, 9, 9, 9], unit);
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        break;
+      case 'suiryu':
+        this.createCrossArea([9, 9, 9, 9], unit);
+        this.createDiagonallyArea([4, 2, 2, 4], unit);
+        break;
+      case 'housi':
+        this.createCrossArea([9, 3, 3, 9], unit);
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        // 特殊　斜め上3飛べる
+        break;
+      case 'kakusyou':
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        //特殊　飛び越し取り
+        break;
+      case 'rinki':
+        this.createDiagonallyArea([2, 9, 9, 2], unit);
+        this.createCrossArea([3, 2, 2, 9], unit);
+        break;
+      case 'syahei':
+        this.createCrossArea([9, 2, 2, 9], unit);
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        break;
+      case 'sitennou':
+        // 特殊　全部飛び
+        this.createCrossArea([9, 9, 9, 9], unit);
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        break;
+      case 'suizou':
+        this.createCrossArea([0, 1, 1, 1], unit);
+        this.createDiagonallyArea([1, 1, 1, 1], unit);
+        break;
+      case 'taisi':
+        // 特殊　王の役
+        this.createCrossArea([1, 1, 1, 1], unit);
+        this.createDiagonallyArea([1, 1, 1, 1], unit);
+        break;
+      case 'kouken':
+        // 特殊　各3こまづつとべる
+        this.createCrossArea([9, 9, 9, 9], unit);
+        this.createDiagonallyArea([3, 9, 9, 3], unit);
+        break; 
+      case 'komainu':
+        // 特殊　各3こまづつとべる
+        this.createCrossArea([9, 9, 9, 9], unit);
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        break;
+      case 'hisyou':
+        // 特殊　飛び越し取り
+        this.createCrossArea([9, 9, 9, 9], unit);
+        break;
+      case 'higaku':
+        // 特殊　飛び越し取り 横
+        this.createCrossArea([9, 9, 9, 9], unit);
+        this.createDiagonallyArea([2, 3, 3, 2], unit);
+        break;
+      case 'hizyuu':
+        // 特殊　斜め上2　飛ぶ
+        this.createCrossArea([9, 9, 9, 9], unit);
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        break;
+      case 'daizyuu':
+        // 特殊　斜め上全部　飛ぶ
+        this.createCrossArea([9, 9, 9, 9], unit);
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        break;
+      case 'makatu':
+        // 二回行動
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        break;
+      case 'kougyou':
+        // 二回行動
+        this.createCrossArea([9, 9, 9, 9], unit);
+        this.createDiagonallyArea([9, 9, 9, 9], unit);
+        break;
       default:
         this.createMovableAreaByMov(unit);
     }
