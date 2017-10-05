@@ -1649,7 +1649,7 @@ Imported.TMSrpg = true;
 
   // 十字の移動範囲を表示する
   // [bottom, left, right, top]
-  Game_Map.prototype.createCrossArea = function(area, unit) {
+  Game_Map.prototype.createCrossArea = function(area, unit, fly) {
     var a = [];
 
     a.push([unit.x, unit.y + 1, unit.x, unit.y, 0, '1', area[0]]);
@@ -1662,7 +1662,6 @@ Imported.TMSrpg = true;
       var x = data[0];
       var y = data[1];
       var key = '' + x + ',' + y;
-      // this._srpgArea['1,2'] = '11' の '11' は移動経路を示す(下: 1 左: 2 右: 3 上: 4)
       if (this.canPass(data[2], data[3], data[4]) && data[6] > 0 &&
           (!this._srpgArea[key] || data[5].length <= this._srpgArea[key].length)) {
         this._srpgArea[key] = data[5];
@@ -1742,6 +1741,15 @@ Imported.TMSrpg = true;
       }
     }
   };
+
+  
+  // 飛び越し移動
+  // 現在の位置からの移動距離を[x,y]で渡す
+  // 例: 左右上ナナメ3　[[-3,-3], [3,-3]]
+  Game_Map.prototype.createMovableArea = function(area, unit) {
+    
+  }
+  
 
   // 待機範囲を表示する
   Game_Map.prototype.showWaitingArea = function(unit) {
