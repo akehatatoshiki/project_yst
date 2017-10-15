@@ -1607,7 +1607,7 @@ Imported.TMSrpg = true;
         // 特殊　各3こまづつとべる
         this.createCrossArea([9, 9, 9, 9], unit);
         this.createDiagonallyArea([3, 9, 9, 3], unit);
-        break; 
+        break;
       case 'komainu':
         // 特殊　各3こまづつとべる
         this.createCrossArea([9, 9, 9, 9], unit);
@@ -1742,14 +1742,14 @@ Imported.TMSrpg = true;
     }
   };
 
-  
+
   // 飛び越し移動
   // 現在の位置からの移動距離を[x,y]で渡す
   // 例: 左右上ナナメ3　[[-3,-3], [3,-3]]
   Game_Map.prototype.createMovableArea = function(area, unit) {
-    
+
   }
-  
+
 
   // 待機範囲を表示する
   Game_Map.prototype.showWaitingArea = function(unit) {
@@ -1949,6 +1949,28 @@ Imported.TMSrpg = true;
     } else {
       return false;
     }
+  }
+
+  Game_Map.prototype.enemies = function() {
+    var events = this.events();
+    var enemies = events.find(function(unit) {
+      if(!unit.srpgBattler()) return false;
+      if(unit.srpgBattler().isActor()) return false;
+      if($gameTemp._srpgDeadUnitIds.includes(unit._eventId)) return false;
+      return unit;
+    }
+    return enemies;
+  }
+
+  Game_Map.prototype.allies = function() {
+    var events = this.events();
+    var allies = events.find(function(unit) {
+      if(!unit.srpgBattler()) return false;
+      if(!unit.srpgBattler().isActor()) return false;
+      if($gameTemp._srpgDeadUnitIds.includes(unit._eventId)) return false;
+      return unit;
+    }
+    return allies;
   }
 
   //-----------------------------------------------------------------------------
@@ -2573,7 +2595,7 @@ Imported.TMSrpg = true;
     var target = $dataItems.find(function(item) {
       if(item && item.meta){
         return item.meta.unit === "EV_" + type;
-      } 
+      }
       else {
         return false;
       }
@@ -3906,8 +3928,15 @@ Imported.TMSrpg = true;
     var event = this._srpgStatusWindow.user();
     this.openSrpgHelp(actionRangeHelp, 1);
     this._srpgSkillWindow.close();
-    this.setAreaHandler(this.okAreaAction, this.cancelAreaAction);
-    $gameMap.showRangeArea(event.x, event.y, this._srpgSkillWindow.item());
+    target = this._srpgSkillWindow.item();
+    if(target && target.meta.type == 'all_range'){
+      this._srpgCommandWindow.setHandler('yesCommand', this.srpgCommandTurnEndYes.bind(this));
+      this._srpgCommandWindow.setHandler('noCommand', this.cancelSrpgCommand.bind(this));
+      this._srpgCommandWindow.refreshYesNo(this._helpWindow.height);
+    } else {
+      this.setAreaHandler(this.okAreaAction, this.cancelAreaAction);
+      $gameMap.showRangeArea(event.x, event.y, target);
+    }
   };
 
   // SRPGスキルウィンドウ【キャンセル】
@@ -4058,6 +4087,27 @@ Imported.TMSrpg = true;
     this.areaSelecterDeactivate(true);
     this._srpgTurnState = 3;
   }
+
+  Scene_Map.prototype.okAction = function() {
+    var event = this._srpgStatusWindow.user();
+    $gameTemp.reserveSrpgCommand(this._srpgCommandWindow.index(), event);   // コマンドウィンドウの復元予約
+    this.openSrpgHelp(actionEffectHelp, 1);
+    this.areaSelecterDeactivate(false);
+    this._lastUnitDirection = event.direction();// 現在の向きを記憶
+    this.setSrpgAllRangeAction(event, this._srpgSkillWindow.item());
+  };
+
+  Scene_Map.prototype.setSrpgAllRangeAction = function(event, skill) {
+    var targets = [];
+    if(skill.meta.target === 'random') {
+      var tgt = event.isActor() ? $gameMap.enemies() : $gameMap.allies()
+      var i = Math.floor(Math.random() * (targets.length + 1 - 0) ) + 0;
+      targets.push(tgt[i]);
+    }
+    for (let e of targets) {
+      this._srpgStatusWindow.setAction(skill, e);
+    }
+  };
 
   // 範囲選択のキャンセル【行動】
   Scene_Map.prototype.cancelAreaAction = function() {
@@ -4218,6 +4268,6 @@ Imported.TMSrpg = true;
     this._statusWindow.setHandler('cancel',   this.popScene.bind(this));
     this.addWindow(this._statusWindow);
   };
-  
+
 
 })();
